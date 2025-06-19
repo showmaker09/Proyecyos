@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MiMangaBot")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dc07fc581083c7d4fbb3ad12ecb97ce951228d58")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+abc5d6479b02bbdd143c633d2de5ec0f7fc567d6")]
 [assembly: System.Reflection.AssemblyProductAttribute("MiMangaBot")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MiMangaBot")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

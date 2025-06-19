@@ -1,5 +1,6 @@
 using MiMangaBot.Domain;
 using MiMangaBot.Domain.Filters;
+using MiMangaBot.Domain.Pagination; // ¡Nuevo using!
 using MiMangaBot.Infrastructure;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,12 @@ public class MangaServices
     public MangaServices(MangaRepository mangaRepository)
     {
         _mangaRepository = mangaRepository;
+    }
+
+    // --- Nuevo método para obtener mangas paginados ---
+    public PagedResponse<Manga> GetPagedMangas(PaginationParams paginationParams)
+    {
+        return _mangaRepository.GetPagedMangas(paginationParams);
     }
 
     public List<Manga> GetAllMangas()

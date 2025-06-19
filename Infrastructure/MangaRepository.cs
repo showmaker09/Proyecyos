@@ -1,7 +1,7 @@
 using MiMangaBot.Domain;
 using MiMangaBot.Domain.Filters;
+using MiMangaBot.Domain.Pagination; // ¡Nuevo using!
 using MySql.Data.MySqlClient;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +16,88 @@ public class MangaRepository
     {
         _connectionString = connectionString;
     }
+
+    // --- Nuevo método para obtener mangas paginados ---
+    public PagedResponse<Manga> GetPagedMangas(PaginationParams paginationParams)
+    {
+        var mangas = new List<Manga>();
+        int totalRecords = GetTotalMangaCount(); // Obtiene el conteo total primero
+
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            try
+            {
+                connection.Open();
+                // Consulta para paginación: OFFSET (saltar) y LIMIT (tomar)
+                string query = "SELECT id, nombre, genero, Fecha_de_Publicacion FROM Manga_Flor.mangas LIMIT @pageSize OFFSET @offset";
+
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@pageSize", paginationParams.PageSize);
+                    command.Parameters.AddWithValue("@offset", (paginationParams.PageNumber - 1) * paginationParams.PageSize);
+
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            mangas.Add(new Manga
+                            {
+                                Id = reader.GetInt32("id"),
+                                Nombre = reader.GetString("nombre"),
+                                Genero = reader.IsDBNull(reader.GetOrdinal("genero")) ? null : reader.GetString("genero"),
+                                FechaDePublicacion = reader.IsDBNull(reader.GetOrdinal("Fecha_de_Publicacion")) ? null : reader.GetString("Fecha_de_Publicacion")
+                            });
+                        }
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine($"Error de MySQL al obtener mangas paginados: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error general al obtener mangas paginados: {ex.Message}");
+                throw;
+            }
+        }
+        // Devuelve la respuesta paginada
+        return new PagedResponse<Manga>(mangas, paginationParams.PageNumber, paginationParams.PageSize, totalRecords);
+    }
+
+    // --- Método para obtener el total de registros de mangas ---
+    private int GetTotalMangaCount()
+    {
+        int count = 0;
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            try
+            {
+                connection.Open();
+                string query = "SELECT COUNT(*) FROM Manga_Flor.mangas";
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    count = Convert.ToInt32(command.ExecuteScalar());
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine($"Error de MySQL al obtener el conteo de mangas: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error general al obtener el conteo de mangas: {ex.Message}");
+                throw;
+            }
+        }
+        return count;
+    }
+
+    // --- Los métodos existentes GetAllMangas, GetMangaById, AddManga, UpdateManga, DeleteManga, SearchMangas
+    //     permanecen igual o puedes decidir si quieres que GetAllMangas también use paginación por defecto
+    //     o si solo quieres el nuevo endpoint paginado. Por ahora, dejaré GetAllMangas como antes. ---
 
     public IEnumerable<Manga> GetAllMangas()
     {
@@ -38,7 +120,6 @@ public class MangaRepository
                                 Id = reader.GetInt32("id"),
                                 Nombre = reader.GetString("nombre"),
                                 Genero = reader.IsDBNull(reader.GetOrdinal("genero")) ? null : reader.GetString("genero"),
-                                // ¡CAMBIO AQUÍ! Leer como String
                                 FechaDePublicacion = reader.IsDBNull(reader.GetOrdinal("Fecha_de_Publicacion")) ? null : reader.GetString("Fecha_de_Publicacion")
                             });
                         }
@@ -58,7 +139,7 @@ public class MangaRepository
         }
         return mangas;
     }
-
+    // ... (Mantén GetMangaById, AddManga, UpdateManga, DeleteManga, SearchMangas sin cambios si ya los tienes)
     public Manga? GetMangaById(int id)
     {
         Manga? manga = null;
@@ -82,7 +163,6 @@ public class MangaRepository
                                 Id = reader.GetInt32("id"),
                                 Nombre = reader.GetString("nombre"),
                                 Genero = reader.IsDBNull(reader.GetOrdinal("genero")) ? null : reader.GetString("genero"),
-                                // ¡CAMBIO AQUÍ!
                                 FechaDePublicacion = reader.IsDBNull(reader.GetOrdinal("Fecha_de_Publicacion")) ? null : reader.GetString("Fecha_de_Publicacion")
                             };
                         }
@@ -91,7 +171,7 @@ public class MangaRepository
             }
             catch (MySqlException ex)
             {
-                Console.WriteLine($"Error de MySQL al obtener manga por ID: {ex.Message}");
+                                Console.WriteLine($"Error de MySQL al obtener manga por ID: {ex.Message}");
                 throw;
             }
             catch (Exception ex)
@@ -116,7 +196,6 @@ public class MangaRepository
                 {
                     command.Parameters.AddWithValue("@nombre", manga.Nombre);
                     command.Parameters.AddWithValue("@genero", (object?)manga.Genero ?? DBNull.Value);
-                    // ¡CAMBIO AQUÍ! Pasar el string directamente
                     command.Parameters.AddWithValue("@Fecha_de_Publicacion", (object?)manga.FechaDePublicacion ?? DBNull.Value);
 
                     command.ExecuteNonQuery();
@@ -148,7 +227,6 @@ public class MangaRepository
                 {
                     command.Parameters.AddWithValue("@nombre", updatedManga.Nombre);
                     command.Parameters.AddWithValue("@genero", (object?)updatedManga.Genero ?? DBNull.Value);
-                    // ¡CAMBIO AQUÍ!
                     command.Parameters.AddWithValue("@Fecha_de_Publicacion", (object?)updatedManga.FechaDePublicacion ?? DBNull.Value);
                     command.Parameters.AddWithValue("@id", id);
 
@@ -199,7 +277,7 @@ public class MangaRepository
 
     public IEnumerable<Manga> SearchMangas(MangaFilter filter)
     {
-        // Esto sigue filtrando en memoria
+        // Este método sigue filtrando en memoria por simplicidad.
         return GetAllMangas().Where(filter.BuildFilter().Compile());
     }
 }

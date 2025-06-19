@@ -2,7 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using MiMangaBot.Domain;
 using MiMangaBot.Services;
 using MiMangaBot.Domain.Filters;
-using System; // Necesario para DateTime en el cuerpo de la petición
+using MiMangaBot.Domain.Pagination; // ¡Nuevo using!
+using System;
 
 namespace MiMangaBot.Api.Controllers;
 
@@ -17,7 +18,24 @@ public class MangasController : ControllerBase
         _mangaServices = mangaServices;
     }
 
-    // GET: api/Mangas
+    // --- Nuevo endpoint para obtener mangas paginados ---
+    // GET: api/Mangas/paged?PageNumber=1&PageSize=10
+    [HttpGet("paged")]
+    public IActionResult GetPagedMangas([FromQuery] PaginationParams paginationParams)
+    {
+        try
+        {
+            var pagedMangas = _mangaServices.GetPagedMangas(paginationParams);
+            return Ok(pagedMangas);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al obtener mangas paginados: {ex.Message}");
+            return StatusCode(500, "Error interno del servidor al obtener mangas paginados.");
+        }
+    }
+
+    // GET: api/Mangas (este ya lo tenías, ahora coexistirá con el paginado)
     [HttpGet]
     public IActionResult GetAllMangas()
     {
@@ -33,6 +51,7 @@ public class MangasController : ControllerBase
         }
     }
 
+    // ... (El resto de métodos GetMangaById, AddManga, UpdateManga, DeleteManga, SearchMangas siguen igual)
     // GET: api/Mangas/{id}
     [HttpGet("{id}")]
     public IActionResult GetMangaById(int id)
@@ -65,7 +84,7 @@ public class MangasController : ControllerBase
         try
         {
             _mangaServices.AddManga(manga);
-            return StatusCode(201, manga); // Devuelve 201 Created con el objeto creado
+            return StatusCode(201, manga);
         }
         catch (Exception ex)
         {
