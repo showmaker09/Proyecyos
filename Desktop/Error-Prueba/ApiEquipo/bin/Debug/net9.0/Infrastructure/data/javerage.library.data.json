@@ -1,0 +1,492 @@
+[
+  {
+    "Id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+    "Title": "One Piece",
+    "Description": "Monkey D. Luffy y su tripulaci\u00F3n de los Piratas del Sombrero de Paja exploran la Grand Line en busca del tesoro definitivo conocido como One Piece para convertirse en el pr\u00F3ximo Rey de los Piratas.",
+    "CoverImageUrl": "https://example.com/one_piece_cover.jpg",
+    "Author": "Eiichiro Oda",
+    "Genre": "Aventura, Fantas\u00EDa, Shonen",
+    "YearPublished": 1997,
+    "Rating": 10
+  },
+  {
+    "Id": "b2c3d4e5-f6a7-8901-2345-67890abcdef0",
+    "Title": "Naruto",
+    "Description": "Naruto Uzumaki, un joven ninja hu\u00E9rfano con un demonio sellado en su interior, sue\u00F1a con convertirse en el Hokage, el l\u00EDder de su aldea, y ganar el respeto de todos.",
+    "CoverImageUrl": "https://example.com/naruto_cover.jpg",
+    "Author": "Masashi Kishimoto",
+    "Genre": "Aventura, Fantas\u00EDa, Shonen",
+    "YearPublished": 1999,
+    "Rating": 9
+  },
+  {
+    "Id": "c3d4e5f6-a7b8-9012-3456-7890abcdef01",
+    "Title": "Attack on Titan",
+    "Description": "En un mundo donde la humanidad vive dentro de ciudades amuralladas para protegerse de los Titanes, Eren Jaeger jura eliminar a todas las criaturas despu\u00E9s de que un Tit\u00E1n destruye su ciudad natal y mata a su madre.",
+    "CoverImageUrl": "https://example.com/attack_on_titan_cover.jpg",
+    "Author": "Hajime Isayama",
+    "Genre": "Acci\u00F3n, Drama, Fantas\u00EDa Oscura",
+    "YearPublished": 2009,
+    "Rating": 10
+  },
+  {
+    "Id": "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+    "Title": "My Hero Academia",
+    "Description": "En un mundo donde la mayor\u00EDa de la poblaci\u00F3n nace con superpoderes, un joven sin poderes, Izuku Midoriya, es descubierto por el h\u00E9roe n\u00FAmero uno, All Might, y hereda su poder.",
+    "CoverImageUrl": "https://example.com/my_hero_academia_cover.jpg",
+    "Author": "Kohei Horikoshi",
+    "Genre": "Acci\u00F3n, Aventura, Superh\u00E9roes",
+    "YearPublished": 2014,
+    "Rating": 9
+  },
+  {
+    "Id": "e5f6a7b8-c9d0-1234-5678-90abcdef0123",
+    "Title": "Dragon Ball",
+    "Description": "Las aventuras de Son Goku desde su ni\u00F1ez hasta su edad adulta mientras entrena en artes marciales y explora el mundo en busca de las siete Esferas del Drag\u00F3n.",
+    "CoverImageUrl": "https://example.com/dragon_ball_cover.jpg",
+    "Author": "Akira Toriyama",
+    "Genre": "Aventura, Fantas\u00EDa, Artes Marciales",
+    "YearPublished": 1984,
+    "Rating": 9
+  },
+  {
+    "Id": "f6a7b8c9-d0e1-2345-6789-0abcdef01234",
+    "Title": "Death Note",
+    "Description": "Light Yagami, un estudiante de secundaria, descubre un cuaderno sobrenatural que le permite matar a cualquier persona cuyo nombre escriba en \u00E9l.",
+    "CoverImageUrl": "https://example.com/death_note_cover.jpg",
+    "Author": "Tsugumi Ohba, Takeshi Obata",
+    "Genre": "Misterio, Sobrenatural, Thriller",
+    "YearPublished": 2003,
+    "Rating": 10
+  },
+  {
+    "Id": "a7b8c9d0-e1f2-3456-7890-abcdef012345",
+    "Title": "Fullmetal Alchemist",
+    "Description": "Dos hermanos alquimistas, Edward y Alphonse Elric, buscan la Piedra Filosofal para restaurar sus cuerpos despu\u00E9s de un intento fallido de resucitar a su madre.",
+    "CoverImageUrl": "https://example.com/fullmetal_alchemist_cover.jpg",
+    "Author": "Hiromu Arakawa",
+    "Genre": "Aventura, Fantas\u00EDa, Steampunk",
+    "YearPublished": 2001,
+    "Rating": 10
+  },
+  {
+    "Id": "b8c9d0e1-f2a3-4567-8901-234567890abc",
+    "Title": "Berserk",
+    "Description": "Guts, un espadach\u00EDn solitario, viaja por un mundo oscuro y de fantas\u00EDa lleno de demonios y nobles corruptos, buscando venganza.",
+    "CoverImageUrl": "https://example.com/berserk_cover.jpg",
+    "Author": "Kentaro Miura",
+    "Genre": "Acci\u00F3n, Fantas\u00EDa Oscura, Horror",
+    "YearPublished": 1989,
+    "Rating": 10
+  },
+  {
+    "Id": "c9d0e1f2-a3b4-5678-9012-34567890abcd",
+    "Title": "Hunter x Hunter",
+    "Description": "Gon Freecss deja su hogar para convertirse en un Cazador, un profesional con licencia que se especializa en b\u00FAsquedas fant\u00E1sticas como localizar criaturas raras o tesoros.",
+    "CoverImageUrl": "https://example.com/hunter_x_hunter_cover.jpg",
+    "Author": "Yoshihiro Togashi",
+    "Genre": "Aventura, Fantas\u00EDa, Shonen",
+    "YearPublished": 1998,
+    "Rating": 9
+  },
+  {
+    "Id": "d0e1f2a3-b4c5-6789-0123-4567890abcde",
+    "Title": "Demon Slayer: Kimetsu no Yaiba",
+    "Description": "Despu\u00E9s de que su familia es masacrada por demonios y su hermana se convierte en uno, Tanjiro Kamado emprende un viaje para vengar a su familia y curar a su hermana.",
+    "CoverImageUrl": "https://example.com/demon_slayer_cover.jpg",
+    "Author": "Koyoharu Gotouge",
+    "Genre": "Acci\u00F3n, Fantas\u00EDa, Hist\u00F3rico",
+    "YearPublished": 2016,
+    "Rating": 9
+  },
+  {
+    "Id": "e1f2a3b4-c5d6-7890-1234-567890abcdef",
+    "Title": "Jujutsu Kaisen",
+    "Description": "Yuji Itadori se une a una organizaci\u00F3n secreta de Jujutsu Hechiceros para matar a una poderosa maldici\u00F3n despu\u00E9s de que consume un objeto maldito.",
+    "CoverImageUrl": "https://example.com/jujutsu_kaisen_cover.jpg",
+    "Author": "Gege Akutami",
+    "Genre": "Acci\u00F3n, Fantas\u00EDa Oscura, Sobrenatural",
+    "YearPublished": 2018,
+    "Rating": 9
+  },
+  {
+    "Id": "f2a3b4c5-d6e7-8901-2345-67890abcdef0",
+    "Title": "Tokyo Ghoul",
+    "Description": "Ken Kaneki, un estudiante universitario, apenas sobrevive a un encuentro mortal con un ghoul, una criatura que devora carne humana, y se convierte en un h\u00EDbrido mitad ghoul, mitad humano.",
+    "CoverImageUrl": "https://example.com/tokyo_ghoul_cover.jpg",
+    "Author": "Sui Ishida",
+    "Genre": "Acci\u00F3n, Drama, Fantas\u00EDa Oscura",
+    "YearPublished": 2011,
+    "Rating": 8
+  },
+  {
+    "Id": "a3b4c5d6-e7f8-9012-3456-7890abcdef01",
+    "Title": "Vinland Saga",
+    "Description": "Thorfinn, un joven guerrero vikingo, busca vengarse de Askeladd, el l\u00EDder mercenario que mat\u00F3 a su padre.",
+    "CoverImageUrl": "https://example.com/vinland_saga_cover.jpg",
+    "Author": "Makoto Yukimura",
+    "Genre": "Aventura, Drama, Hist\u00F3rico",
+    "YearPublished": 2005,
+    "Rating": 9
+  },
+  {
+    "Id": "b4c5d6e7-f8a9-0123-4567-890abcdef012",
+    "Title": "Bleach",
+    "Description": "Ichigo Kurosaki, un adolescente que puede ver fantasmas, se convierte en un Shinigami (Dios de la Muerte) sustituto despu\u00E9s de que Rukia Kuchiki, un Shinigami, le transfiere sus poderes.",
+    "CoverImageUrl": "https://example.com/bleach_cover.jpg",
+    "Author": "Tite Kubo",
+    "Genre": "Acci\u00F3n, Aventura, Sobrenatural",
+    "YearPublished": 2001,
+    "Rating": 8
+  },
+  {
+    "Id": "c5d6e7f8-a9b0-1234-5678-90abcdef0123",
+    "Title": "One-Punch Man",
+    "Description": "Saitama, un h\u00E9roe que puede derrotar a cualquier enemigo con un solo golpe, busca un oponente digno mientras lucha contra el aburrimiento.",
+    "CoverImageUrl": "https://example.com/one_punch_man_cover.jpg",
+    "Author": "ONE, Yusuke Murata",
+    "Genre": "Acci\u00F3n, Comedia, Superh\u00E9roes",
+    "YearPublished": 2012,
+    "Rating": 9
+  },
+  {
+    "Id": "d6e7f8a9-b0c1-2345-6789-0abcdef01234",
+    "Title": "Spy x Family",
+    "Description": "Un esp\u00EDa debe \u0027construir una familia\u0027 para llevar a cabo una misi\u00F3n, pero su \u0027esposa\u0027 es una asesina y su \u0027hija\u0027 es una tel\u00E9pata.",
+    "CoverImageUrl": "https://example.com/spy_x_family_cover.jpg",
+    "Author": "Tatsuya Endo",
+    "Genre": "Acci\u00F3n, Comedia, Recuentos de la Vida",
+    "YearPublished": 2019,
+    "Rating": 9
+  },
+  {
+    "Id": "e7f8a9b0-c1d2-3456-7890-abcdef012345",
+    "Title": "Chainsaw Man",
+    "Description": "Denji, un joven que se fusiona con un demonio de motosierra, se une a los Cazadores de Demonios de Seguridad P\u00FAblica.",
+    "CoverImageUrl": "https://example.com/chainsaw_man_cover.jpg",
+    "Author": "Tatsuki Fujimoto",
+    "Genre": "Acci\u00F3n, Fantas\u00EDa Oscura, Horror",
+    "YearPublished": 2018,
+    "Rating": 9
+  },
+  {
+    "Id": "f8a9b0c1-d2e3-4567-8901-234567890abc",
+    "Title": "Fire Force",
+    "Description": "Shinra Kusakabe, un joven con la habilidad de encender sus pies a voluntad, se une a una compa\u00F1\u00EDa de bomberos especial para combatir a las Infernales, criaturas que se forman a partir de personas que se queman espont\u00E1neamente.",
+    "CoverImageUrl": "https://example.com/fire_force_cover.jpg",
+    "Author": "Atsushi Ohkubo",
+    "Genre": "Acci\u00F3n, Fantas\u00EDa, Sobrenatural",
+    "YearPublished": 2015,
+    "Rating": 8
+  },
+  {
+    "Id": "a9b0c1d2-e3f4-5678-9012-34567890abcd",
+    "Title": "Dr. Stone",
+    "Description": "Despu\u00E9s de que toda la humanidad se convierte en piedra, el genio cient\u00EDfico Senku Ishigami emerge del petrificado mundo e intenta reconstruir la civilizaci\u00F3n.",
+    "CoverImageUrl": "https://example.com/dr_stone_cover.jpg",
+    "Author": "Riichiro Inagaki, Boichi",
+    "Genre": "Aventura, Ciencia Ficci\u00F3n, Post-Apocal\u00EDptico",
+    "YearPublished": 2017,
+    "Rating": 9
+  },
+  {
+    "Id": "b0c1d2e3-f4a5-6789-0123-4567890abcde",
+    "Title": "Assassination Classroom",
+    "Description": "Los estudiantes de la clase 3-E de la escuela Kunugigaoka tienen la tarea de asesinar a su maestro, una poderosa criatura alien\u00EDgena con tent\u00E1culos que amenaza con destruir la Tierra.",
+    "CoverImageUrl": "https://example.com/assassination_classroom_cover.jpg",
+    "Author": "Yusei Matsui",
+    "Genre": "Acci\u00F3n, Comedia, Ciencia Ficci\u00F3n",
+    "YearPublished": 2012,
+    "Rating": 8
+  },
+  {
+    "Id": "c1d2e3f4-a5b6-7890-1234-567890abcdef",
+    "Title": "Code Geass",
+    "Description": "En un mundo alternativo donde el Sacro Imperio de Britannia ha conquistado Jap\u00F3n, un joven estudiante llamado Lelouch Lamperouge obtiene un poder misterioso y busca venganza.",
+    "CoverImageUrl": "https://example.com/code_geass_cover.jpg",
+    "Author": "Ichir\u014D \u014Ckouchi, Majiko!",
+    "Genre": "Mecha, Ciencia Ficci\u00F3n, Thriller",
+    "YearPublished": 2006,
+    "Rating": 9
+  },
+  {
+    "Id": "d2e3f4a5-b6c7-8901-2345-67890abcdef0",
+    "Title": "The Promised Neverland",
+    "Description": "Emma, Norman y Ray viven en un orfanato id\u00EDlico, pero descubren la oscura verdad detr\u00E1s de su existencia.",
+    "CoverImageUrl": "https://example.com/the_promised_neverland_cover.jpg",
+    "Author": "Kaiu Shirai, Posuka Demizu",
+    "Genre": "Misterio, Horror, Thriller",
+    "YearPublished": 2016,
+    "Rating": 9
+  },
+  {
+    "Id": "e3f4a5b6-c7d8-9012-3456-7890abcdef01",
+    "Title": "Fairy Tail",
+    "Description": "Lucy Heartfilia, una maga celestial, se une al gremio de magos Fairy Tail y emprende numerosas aventuras con sus nuevos amigos.",
+    "CoverImageUrl": "https://example.com/fairy_tail_cover.jpg",
+    "Author": "Hiro Mashima",
+    "Genre": "Aventura, Fantas\u00EDa, Comedia",
+    "YearPublished": 2006,
+    "Rating": 8
+  },
+  {
+    "Id": "f4a5b6c7-d8e9-0123-4567-890abcdef012",
+    "Title": "Black Clover",
+    "Description": "Asta, un hu\u00E9rfano que no puede usar magia en un mundo donde todos la tienen, aspira a convertirse en el Rey Mago.",
+    "CoverImageUrl": "https://example.com/black_clover_cover.jpg",
+    "Author": "Yuki Tabata",
+    "Genre": "Acci\u00F3n, Fantas\u00EDa, Aventura",
+    "YearPublished": 2015,
+    "Rating": 8
+  },
+  {
+    "Id": "a5b6c7d8-e9f0-1234-5678-90abcdef0123",
+    "Title": "Gintama",
+    "Description": "Un samur\u00E1i exc\u00E9ntrico, Gintoki Sakata, trabaja como un \u0027Yorozuya\u0027 (haciendo cualquier trabajo) en un Edo alternativo invadido por alien\u00EDgenas.",
+    "CoverImageUrl": "https://example.com/gintama_cover.jpg",
+    "Author": "Hideaki Sorachi",
+    "Genre": "Comedia, Ciencia Ficci\u00F3n, Parodia",
+    "YearPublished": 2003,
+    "Rating": 9
+  },
+  {
+    "Id": "b6c7d8e9-f0a1-2345-6789-0abcdef01234",
+    "Title": "JoJo\u0027s Bizarre Adventure",
+    "Description": "La historia de la familia Joestar y sus batallas contra fuerzas sobrenaturales a lo largo de las generaciones.",
+    "CoverImageUrl": "https://example.com/jojos_bizarre_adventure_cover.jpg",
+    "Author": "Hirohiko Araki",
+    "Genre": "Acci\u00F3n, Aventura, Sobrenatural",
+    "YearPublished": 1987,
+    "Rating": 9
+  },
+  {
+    "Id": "c7d8e9f0-a1b2-3456-7890-abcdef012345",
+    "Title": "Psycho-Pass",
+    "Description": "En un futuro donde un sistema computarizado eval\u00FAa el estado mental de los ciudadanos, Akane Tsunemori se une a una unidad de aplicaci\u00F3n de la ley.",
+    "CoverImageUrl": "https://example.com/psycho_pass_cover.jpg",
+    "Author": "Gen Urobuchi",
+    "Genre": "Ciencia Ficci\u00F3n, Crimen, Cyberpunk",
+    "YearPublished": 2012,
+    "Rating": 8
+  },
+  {
+    "Id": "d8e9f0a1-b2c3-4567-8901-234567890abc",
+    "Title": "Mob Psycho 100",
+    "Description": "Shigeo \u0027Mob\u0027 Kageyama, un estudiante de secundaria con poderosas habilidades ps\u00EDquicas, lucha por controlar sus emociones y poderes.",
+    "CoverImageUrl": "https://example.com/mob_psycho_100_cover.jpg",
+    "Author": "ONE",
+    "Genre": "Acci\u00F3n, Comedia, Sobrenatural",
+    "YearPublished": 2012,
+    "Rating": 9
+  },
+  {
+    "Id": "e9f0a1b2-c3d4-5678-9012-34567890abcd",
+    "Title": "Re:Zero - Starting Life in Another World",
+    "Description": "Subaru Natsuki, un joven hikikomori, es transportado a un mundo de fantas\u00EDa y adquiere la habilidad de regresar de la muerte.",
+    "CoverImageUrl": "https://example.com/re_zero_cover.jpg",
+    "Author": "Tappei Nagatsuki, Shinichirou Otsuka",
+    "Genre": "Isekai, Fantas\u00EDa, Drama",
+    "YearPublished": 2014,
+    "Rating": 8
+  },
+  {
+    "Id": "f0a1b2c3-d4e5-6789-0123-4567890abcde",
+    "Title": "Noragami",
+    "Description": "Yato, un dios menor de la calamidad, lucha por ganar seguidores y convertirse en un dios reconocido.",
+    "CoverImageUrl": "https://example.com/noragami_cover.jpg",
+    "Author": "Adachitoka",
+    "Genre": "Acci\u00F3n, Fantas\u00EDa, Sobrenatural",
+    "YearPublished": 2010,
+    "Rating": 8
+  },
+  {
+    "Id": "a1b2c3d4-e5f6-7890-1234-567890abcdee",
+    "Title": "Blue Exorcist",
+    "Description": "Rin Okumura descubre que es el hijo de Satan\u00E1s y se inscribe en la Academia de la Verdadera Cruz para convertirse en un exorcista.",
+    "CoverImageUrl": "https://example.com/blue_exorcist_cover.jpg",
+    "Author": "Kazue Kato",
+    "Genre": "Acci\u00F3n, Fantas\u00EDa, Sobrenatural",
+    "YearPublished": 2009,
+    "Rating": 8
+  },
+  {
+    "Id": "b2c3d4e5-f6a7-8901-2345-67890abcdeef",
+    "Title": "The Seven Deadly Sins",
+    "Description": "La princesa Elizabeth busca a los Siete Pecados Capitales, un grupo de caballeros legendarios, para ayudarla a recuperar su reino.",
+    "CoverImageUrl": "https://example.com/seven_deadly_sins_cover.jpg",
+    "Author": "Nakaba Suzuki",
+    "Genre": "Aventura, Fantas\u00EDa, Acci\u00F3n",
+    "YearPublished": 2012,
+    "Rating": 8
+  },
+  {
+    "Id": "c3d4e5f6-a7b8-9012-3456-7890abcdeeff",
+    "Title": "Seraph of the End",
+    "Description": "Yuichiro Hyakuya, un hu\u00E9rfano, busca vengarse de los vampiros que mataron a su familia.",
+    "CoverImageUrl": "https://example.com/seraph_of_the_end_cover.jpg",
+    "Author": "Takaya Kagami, Yamato Yamamoto",
+    "Genre": "Acci\u00F3n, Fantas\u00EDa Oscura, Sobrenatural",
+    "YearPublished": 2012,
+    "Rating": 7
+  },
+  {
+    "Id": "d4e5f6a7-b8c9-0123-4567-890abcdeeff0",
+    "Title": "Haikyuu!!",
+    "Description": "Shoyo Hinata, un estudiante de secundaria bajito, sue\u00F1a con convertirse en un gran jugador de voleibol.",
+    "CoverImageUrl": "https://example.com/haikyuu_cover.jpg",
+    "Author": "Haruichi Furudate",
+    "Genre": "Deportes, Comedia, Drama",
+    "YearPublished": 2012,
+    "Rating": 9
+  },
+  {
+    "Id": "e5f6a7b8-c9d0-1234-5678-90abcdeeff01",
+    "Title": "Food Wars!: Shokugeki no Soma",
+    "Description": "Soma Yukihira se inscribe en una prestigiosa academia culinaria donde los estudiantes compiten en batallas de cocina.",
+    "CoverImageUrl": "https://example.com/food_wars_cover.jpg",
+    "Author": "Yuto Tsukuda, Shun Saeki",
+    "Genre": "Comedia, Recuentos de la Vida, Cocina",
+    "YearPublished": 2012,
+    "Rating": 8
+  },
+  {
+    "Id": "f6a7b8c9-d0e1-2345-6789-0abcdeeff012",
+    "Title": "Vinland Saga",
+    "Description": "Thorfinn, un joven guerrero vikingo, busca vengarse de Askeladd, el l\u00EDder mercenario que mat\u00F3 a su padre.",
+    "CoverImageUrl": "https://example.com/vinland_saga_cover_2.jpg",
+    "Author": "Makoto Yukimura",
+    "Genre": "Aventura, Drama, Hist\u00F3rico",
+    "YearPublished": 2005,
+    "Rating": 9
+  },
+  {
+    "Id": "a7b8c9d0-e1f2-3456-7890-abcdeeff0123",
+    "Title": "The Ancient Magus\u0027 Bride",
+    "Description": "Chise Hatori, una joven japonesa hu\u00E9rfana, es comprada por un hechicero no humano, Elias Ainsworth, quien la convierte en su aprendiz y futura esposa.",
+    "CoverImageUrl": "https://example.com/ancient_magus_bride_cover.jpg",
+    "Author": "Kore Yamazaki",
+    "Genre": "Fantas\u00EDa, Romance, Recuentos de la Vida",
+    "YearPublished": 2013,
+    "Rating": 8
+  },
+  {
+    "Id": "b8c9d0e1-f2a3-4567-8901-234567890abcd",
+    "Title": "Kaguya-sama: Love Is War",
+    "Description": "Los presidentes del consejo estudiantil, Kaguya Shinomiya y Miyuki Shirogane, se enzarzan en una batalla de ingenio para hacer que el otro confiese su amor.",
+    "CoverImageUrl": "https://example.com/kaguya_sama_cover.jpg",
+    "Author": "Aka Akasaka",
+    "Genre": "Comedia, Romance, Recuentos de la Vida",
+    "YearPublished": 2015,
+    "Rating": 9
+  },
+  {
+    "Id": "c9d0e1f2-a3b4-5678-9012-34567890abcde",
+    "Title": "Toilet-Bound Hanako-kun",
+    "Description": "Nene Yashiro, una estudiante de secundaria, se encuentra con Hanako-kun, el s\u00E9ptimo misterio de la escuela, y se convierte en su asistente.",
+    "CoverImageUrl": "https://example.com/toilet_bound_hanako_kun_cover.jpg",
+    "Author": "Iro Aida",
+    "Genre": "Comedia, Sobrenatural, Romance",
+    "YearPublished": 2014,
+    "Rating": 8
+  },
+  {
+    "Id": "d0e1f2a3-b4c5-6789-0123-4567890abcde0",
+    "Title": "Beastars",
+    "Description": "En un mundo de animales antropom\u00F3rficos, Legoshi, un lobo gris, navega por las complejidades de la sociedad y sus propios instintos carn\u00EDvoros.",
+    "CoverImageUrl": "https://example.com/beastars_cover.jpg",
+    "Author": "Paru Itagaki",
+    "Genre": "Drama, Recuentos de la Vida, Thriller",
+    "YearPublished": 2016,
+    "Rating": 8
+  },
+  {
+    "Id": "e1f2a3b4-c5d6-7890-1234-567890abcde01",
+    "Title": "Dorohedoro",
+    "Description": "Caiman, un hombre con cabeza de reptil y amnesia, busca al hechicero que lo maldijo en un mundo brutal.",
+    "CoverImageUrl": "https://example.com/dorohedoro_cover.jpg",
+    "Author": "Q Hayashida",
+    "Genre": "Acci\u00F3n, Fantas\u00EDa Oscura, Comedia",
+    "YearPublished": 2000,
+    "Rating": 9
+  },
+  {
+    "Id": "f2a3b4c5-d6e7-8901-2345-67890abcde012",
+    "Title": "Drifters",
+    "Description": "Guerreros y figuras hist\u00F3ricas de diferentes \u00E9pocas son transportados a un mundo de fantas\u00EDa para luchar en una guerra.",
+    "CoverImageUrl": "https://example.com/drifters_cover.jpg",
+    "Author": "Kouta Hirano",
+    "Genre": "Acci\u00F3n, Fantas\u00EDa, Hist\u00F3rico",
+    "YearPublished": 2009,
+    "Rating": 8
+  },
+  {
+    "Id": "a3b4c5d6-e7f8-9012-3456-7890abcde0123",
+    "Title": "Goblin Slayer",
+    "Description": "Un aventurero conocido como Goblin Slayer solo acepta misiones relacionadas con la erradicaci\u00F3n de goblins.",
+    "CoverImageUrl": "https://example.com/goblin_slayer_cover.jpg",
+    "Author": "Kumo Kagyu, Noboru Kannatuki",
+    "Genre": "Fantas\u00EDa Oscura, Acci\u00F3n, Aventura",
+    "YearPublished": 2016,
+    "Rating": 7
+  },
+  {
+    "Id": "b4c5d6e7-f8a9-0123-4567-890abcde01234",
+    "Title": "Golden Kamuy",
+    "Description": "Saichi Sugimoto, un veterano de guerra, se une a una joven Ainu, Asirpa, en la b\u00FAsqueda de un tesoro de oro oculto.",
+    "CoverImageUrl": "https://example.com/golden_kamuy_cover.jpg",
+    "Author": "Satoru Noda",
+    "Genre": "Aventura, Hist\u00F3rico, Acci\u00F3n",
+    "YearPublished": 2014,
+    "Rating": 9
+  },
+  {
+    "Id": "c5d6e7f8-a9b0-1234-5678-90abcde012345",
+    "Title": "Grand Blue",
+    "Description": "Iori Kitahara se muda a una ciudad costera y se une al club de buceo de su universidad, que se dedica m\u00E1s a las fiestas que al buceo.",
+    "CoverImageUrl": "https://example.com/grand_blue_cover.jpg",
+    "Author": "Kenji Inoue, Kimitake Yoshioka",
+    "Genre": "Comedia, Recuentos de la Vida",
+    "YearPublished": 2014,
+    "Rating": 8
+  },
+  {
+    "Id": "d6e7f8a9-b0c1-2345-6789-0abcdef0123456",
+    "Title": "March Comes In Like a Lion",
+    "Description": "Rei Kiriyama, un joven jugador profesional de shogi, lucha con la presi\u00F3n de su carrera y sus relaciones personales.",
+    "CoverImageUrl": "https://example.com/march_comes_in_like_a_lion_cover.jpg",
+    "Author": "Chica Umino",
+    "Genre": "Recuentos de la Vida, Drama, Juego",
+    "YearPublished": 2007,
+    "Rating": 9
+  },
+  {
+    "Id": "e7f8a9b0-c1d2-3456-7890-abcdef01234567",
+    "Title": "My Dress-Up Darling",
+    "Description": "Wakana Gojo, un aspirante a artesano de mu\u00F1ecas Hina, se une a Marin Kitagawa, una popular gyaru, para hacer cosplays.",
+    "CoverImageUrl": "https://example.com/my_dress_up_darling_cover.jpg",
+    "Author": "Shinichi Fukuda",
+    "Genre": "Comedia, Romance, Recuentos de la Vida",
+    "YearPublished": 2018,
+    "Rating": 8
+  },
+  {
+    "Id": "f8a9b0c1-d2e3-4567-8901-234567890abcdef",
+    "Title": "Mushoku Tensei: Jobless Reincarnation",
+    "Description": "Un desempleado y encerrado de 34 a\u00F1os muere y se reencarna en un mundo de fantas\u00EDa como Rudeus Greyrat, conservando sus recuerdos.",
+    "CoverImageUrl": "https://example.com/mushoku_tensei_cover.jpg",
+    "Author": "Rifujin na Magonote, Shirotaka",
+    "Genre": "Isekai, Fantas\u00EDa, Drama",
+    "YearPublished": 2012,
+    "Rating": 8
+  },
+  {
+    "Id": "a9b0c1d2-e3f4-5678-9012-34567890abcdef0",
+    "Title": "Vinland Saga",
+    "Description": "Thorfinn, un joven guerrero vikingo, busca vengarse de Askeladd, el l\u00EDder mercenario que mat\u00F3 a su padre.",
+    "CoverImageUrl": "https://example.com/vinland_saga_cover_3.jpg",
+    "Author": "Makoto Yukimura",
+    "Genre": "Aventura, Drama, Hist\u00F3rico",
+    "YearPublished": 2005,
+    "Rating": 9
+  }
+]
