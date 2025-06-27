@@ -1,0 +1,6 @@
+@MiUtilsApi_HostAddress = http://localhost:5151
+
+GET {{MiUtilsApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
