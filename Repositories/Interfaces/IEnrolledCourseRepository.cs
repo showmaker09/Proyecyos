@@ -4,10 +4,11 @@ namespace InscripcionApi.Repositories.Interfaces
 {
     public interface IEnrolledCourseRepository
     {
-        Task<EnrolledCourse?> GetByIdAsync(int id);
-        Task<IEnumerable<EnrolledCourse>> GetByEnrollmentIdAsync(int enrollmentId);
-        Task AddAsync(EnrolledCourse enrolledCourse);
-        Task UpdateAsync(EnrolledCourse enrolledCourse);
-        Task DeleteAsync(EnrolledCourse enrolledCourse);
+        Task<IEnumerable<EnrolledCourse>> GetCoursesByEnrollmentIdAsync(int enrollmentId);
+        Task<EnrolledCourse?> GetEnrolledCourseByIdAsync(int id);
+        Task AddEnrolledCourseAsync(EnrolledCourse enrolledCourse);
+        Task UpdateEnrolledCourseAsync(EnrolledCourse enrolledCourse);
+        Task DeleteEnrolledCourseAsync(int id);
+        Task<bool> EnrolledCourseExistsAsync(int id);
     }
 }

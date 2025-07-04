@@ -4,13 +4,15 @@ namespace InscripcionApi.Repositories.Interfaces
 {
     public interface IStudentRepository
     {
-        Task<Student?> GetByIdAsync(int id);
-        Task<Student?> GetByEmailAsync(string email);
-        Task<IEnumerable<Student>> GetAllAsync(int page, int pageSize);
-        Task AddAsync(Student student);
-        Task UpdateAsync(Student student);
-        Task DeleteAsync(Student student);
-        Task<int> CountAsync();
+        Task<IEnumerable<Student>> GetAllStudentsAsync(int page, int pageSize);
+        Task<Student?> GetStudentByIdAsync(int id);
+        Task<Student?> GetStudentByEmailAsync(string email);
+        Task<Student?> GetStudentByUsernameAsync(string username);
+        Task AddStudentAsync(Student student);
+        Task UpdateStudentAsync(Student student);
+        Task DeleteStudentAsync(int id);
         Task<bool> StudentExistsAsync(int id);
+        Task<bool> StudentExistsByEmailAsync(string email);
+        Task<bool> StudentExistsByUsernameAsync(string username);
     }
 }

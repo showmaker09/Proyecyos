@@ -14,34 +14,43 @@ namespace InscripcionApi.Repositories.Implementations
             _context = context;
         }
 
-        public async Task<EnrolledCourse?> GetByIdAsync(int id)
-        {
-            return await _context.EnrolledCourses.FindAsync(id);
-        }
-
-        public async Task<IEnumerable<EnrolledCourse>> GetByEnrollmentIdAsync(int enrollmentId)
+        public async Task<IEnumerable<EnrolledCourse>> GetCoursesByEnrollmentIdAsync(int enrollmentId)
         {
             return await _context.EnrolledCourses
                                  .Where(ec => ec.SemesterEnrollmentId == enrollmentId)
                                  .ToListAsync();
         }
 
-        public async Task AddAsync(EnrolledCourse enrolledCourse)
+        public async Task<EnrolledCourse?> GetEnrolledCourseByIdAsync(int id)
         {
-            await _context.EnrolledCourses.AddAsync(enrolledCourse);
+            return await _context.EnrolledCourses.FindAsync(id);
+        }
+
+        public async Task AddEnrolledCourseAsync(EnrolledCourse enrolledCourse)
+        {
+            _context.EnrolledCourses.Add(enrolledCourse);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(EnrolledCourse enrolledCourse)
+        public async Task UpdateEnrolledCourseAsync(EnrolledCourse enrolledCourse)
         {
             _context.EnrolledCourses.Update(enrolledCourse);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(EnrolledCourse enrolledCourse)
+        public async Task DeleteEnrolledCourseAsync(int id)
         {
-            _context.EnrolledCourses.Remove(enrolledCourse);
-            await _context.SaveChangesAsync();
+            var enrolledCourse = await _context.EnrolledCourses.FindAsync(id);
+            if (enrolledCourse != null)
+            {
+                _context.EnrolledCourses.Remove(enrolledCourse);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<bool> EnrolledCourseExistsAsync(int id)
+        {
+            return await _context.EnrolledCourses.AnyAsync(e => e.Id == id);
         }
     }
 }

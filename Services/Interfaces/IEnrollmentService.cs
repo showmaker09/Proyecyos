@@ -5,9 +5,11 @@ namespace InscripcionApi.Services.Interfaces
 {
     public interface IEnrollmentService
     {
-        Task<SemesterEnrollmentResponseDto?> StartSemesterEnrollmentAsync(StartEnrollmentDto startDto);
-        Task<SemesterEnrollmentResponseDto?> EnrollCourseAsync(int enrollmentId, EnrollCourseDto enrollDto);
-        Task<SemesterEnrollmentResponseDto?> GetEnrollmentByIdAsync(int enrollmentId);
-        Task<(IEnumerable<SemesterEnrollmentResponseDto>, int totalItems)> GetEnrollmentsByStudentIdAsync(int studentId, int page, int pageSize);
+        Task<SemesterEnrollmentResponseDto?> StartSemesterEnrollmentAsync(StartEnrollmentDto startEnrollmentDto);
+        Task<EnrolledCourseResponseDto?> EnrollCourseAsync(int enrollmentId, EnrollCourseDto enrollCourseDto);
+        Task<SemesterEnrollmentResponseDto?> GetSemesterEnrollmentByIdAsync(int enrollmentId);
+        Task<IEnumerable<SemesterEnrollmentResponseDto>> GetAllSemesterEnrollmentsAsync(int page, int pageSize);
+        Task<bool> DeleteSemesterEnrollmentAsync(int enrollmentId);
+        Task<bool> RemoveEnrolledCourseAsync(int enrollmentId, int enrolledCourseId);
     }
 }

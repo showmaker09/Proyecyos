@@ -6,8 +6,12 @@ namespace InscripcionApi.Models
     public class Student
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGenerated.Identity)]
         public int Id { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string Username { get; set; } = string.Empty;
 
         [Required]
         [StringLength(100)]

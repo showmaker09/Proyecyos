@@ -14,56 +14,62 @@ namespace InscripcionApi.Repositories.Implementations
             _context = context;
         }
 
-        public async Task<SemesterEnrollment?> GetByIdAsync(int id)
+        public async Task<IEnumerable<SemesterEnrollment>> GetAllEnrollmentsAsync(int page, int pageSize)
         {
             return await _context.SemesterEnrollments
                                  .Include(se => se.EnrolledCourses)
-                                 .FirstOrDefaultAsync(se => se.Id == id);
-        }
-
-        // Regla de negocio: obtener la inscripción activa de un estudiante (asumiendo una por semestre)
-        public async Task<SemesterEnrollment?> GetActiveEnrollmentByStudentIdAsync(int studentId)
-        {
-            // Para simplificar, consideramos "activa" la última inscripción creada para el estudiante.
-            // En un sistema real, podrías tener un campo "IsActive" o comparar fechas de inicio/fin del semestre.
-            return await _context.SemesterEnrollments
-                                 .Where(se => se.StudentId == studentId)
-                                 .OrderByDescending(se => se.EnrollmentDate)
-                                 .Include(se => se.EnrolledCourses)
-                                 .FirstOrDefaultAsync();
-        }
-
-        public async Task<IEnumerable<SemesterEnrollment>> GetAllByStudentIdAsync(int studentId, int page, int pageSize)
-        {
-            return await _context.SemesterEnrollments
-                                 .Where(se => se.StudentId == studentId)
-                                 .Include(se => se.EnrolledCourses)
+                                 .Include(se => se.Student)
+                                 .OrderBy(se => se.EnrollmentDate)
                                  .Skip((page - 1) * pageSize)
                                  .Take(pageSize)
                                  .ToListAsync();
         }
 
-        public async Task AddAsync(SemesterEnrollment enrollment)
+        public async Task<SemesterEnrollment?> GetEnrollmentByIdAsync(int id)
         {
-            await _context.SemesterEnrollments.AddAsync(enrollment);
+            return await _context.SemesterEnrollments
+                                 .Include(se => se.EnrolledCourses)
+                                 .Include(se => se.Student)
+                                 .FirstOrDefaultAsync(se => se.Id == id);
+        }
+
+        public async Task<SemesterEnrollment?> GetActiveEnrollmentByStudentIdAsync(int studentId)
+        {
+            return await _context.SemesterEnrollments
+                                 .Include(se => se.EnrolledCourses)
+                                 .FirstOrDefaultAsync(se => se.StudentId == studentId);
+        }
+
+        public async Task AddEnrollmentAsync(SemesterEnrollment enrollment)
+        {
+            _context.SemesterEnrollments.Add(enrollment);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(SemesterEnrollment enrollment)
+        public async Task UpdateEnrollmentAsync(SemesterEnrollment enrollment)
         {
             _context.SemesterEnrollments.Update(enrollment);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(SemesterEnrollment enrollment)
+        public async Task DeleteEnrollmentAsync(int id)
         {
-            _context.SemesterEnrollments.Remove(enrollment);
-            await _context.SaveChangesAsync();
+            var enrollment = await _context.SemesterEnrollments.FindAsync(id);
+            if (enrollment != null)
+            {
+                _context.SemesterEnrollments.Remove(enrollment);
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public async Task<int> CountByStudentIdAsync(int studentId)
+        public async Task<bool> EnrollmentExistsAsync(int id)
         {
-            return await _context.SemesterEnrollments.CountAsync(se => se.StudentId == studentId);
+            return await _context.SemesterEnrollments.AnyAsync(e => e.Id == id);
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
         }
     }
 }

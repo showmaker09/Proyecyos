@@ -1,16 +1,13 @@
 using InscripcionApi.Dtos.Students;
-using InscripcionApi.Services.Interfaces;
 using InscripcionApi.Security;
+using InscripcionApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims; // Para acceder a los claims del usuario
 
 namespace InscripcionApi.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,Estudiante")] // Solo usuarios autenticados (Admin o Estudiante) pueden acceder
-    [ServiceFilter(typeof(IpRestrictionAttribute))] // Proteger todos los endpoints del controlador
+    [Route("api/[controller]")]
     public class StudentsController : ControllerBase
     {
         private readonly IStudentService _studentService;
@@ -22,29 +19,60 @@ namespace InscripcionApi.Controllers
             _logger = logger;
         }
 
-        /// <summary>
-        /// Obtiene un estudiante por su ID. Solo accesible por el propio estudiante o un Admin.
-        /// </summary>
-        /// <param name="id">ID del estudiante.</param>
-        /// <returns>Detalles del estudiante.</returns>
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> GetStudent(int id)
+        [HttpPost]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(StudentResponseDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> RegisterStudent([FromBody] StudentCreateDto studentDto)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
-
-            if (userId == null || userRole == null)
+            if (!ModelState.IsValid)
             {
-                return Forbid(); // No debería ocurrir si [Authorize] funciona
+                return BadRequest(ModelState);
             }
 
-            // Permite al estudiante ver solo su propio perfil, a menos que sea un Admin
-            if (userRole != "Admin" && userId != id.ToString())
+            try
             {
-                return Forbid();
+                var newStudent = await _studentService.RegisterStudentAsync(studentDto);
+                _logger.LogInformation("Estudiante registrado exitosamente: {Email} con Username: {Username}", newStudent?.Email, newStudent?.Username);
+                return CreatedAtAction(nameof(GetStudentById), new { id = newStudent?.Id }, newStudent);
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogWarning("Conflicto al registrar estudiante: {Message}", ex.Message);
+                return Conflict(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al registrar estudiante.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor.");
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrador")]
+        [ServiceFilter(typeof(IpRestrictionAttribute))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<StudentResponseDto>))]
+        public async Task<IActionResult> GetAllStudents([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        {
+            var students = await _studentService.GetAllStudentsAsync(page, pageSize);
+            return Ok(students);
+        }
+
+        [HttpGet("{id}")]
+        [Authorize(Roles = "Administrador,Estudiante")]
+        [ServiceFilter(typeof(IpRestrictionAttribute))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StudentResponseDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> GetStudentById(int id)
+        {
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+
+            if (userRole == "Estudiante" && userId != id.ToString())
+            {
+                return Forbid("No tienes permiso para ver este perfil de estudiante.");
             }
 
             var student = await _studentService.GetStudentByIdAsync(id);
@@ -55,112 +83,56 @@ namespace InscripcionApi.Controllers
             return Ok(student);
         }
 
-        /// <summary>
-        /// Obtiene todos los estudiantes con paginación. Solo accesible por Admin.
-        /// </summary>
-        /// <param name="page">Número de página.</param>
-        /// <param name="pageSize">Tamaño de la página.</param>
-        /// <returns>Lista paginada de estudiantes.</returns>
-        [HttpGet]
-        [Authorize(Roles = "Admin")] // Solo Admin puede listar todos
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> GetAllStudents([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
-        {
-            if (page < 1 || pageSize < 1)
-            {
-                return BadRequest("Los parámetros de paginación deben ser mayores que 0.");
-            }
-
-            var (students, totalItems) = await _studentService.GetAllStudentsAsync(page, pageSize);
-            return Ok(new { data = students, total = totalItems, page, pageSize });
-        }
-
-        /// <summary>
-        /// Crea un nuevo estudiante. Solo accesible por Admin.
-        /// </summary>
-        /// <param name="createDto">Datos del nuevo estudiante.</param>
-        /// <returns>El estudiante creado.</returns>
-        [HttpPost]
-        [Authorize(Roles = "Admin")] // Solo Admin puede crear estudiantes
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> CreateStudent([FromBody] StudentCreateDto createDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                var newStudent = await _studentService.CreateStudentAsync(createDto);
-                return CreatedAtAction(nameof(GetStudent), new { id = newStudent.Id }, newStudent);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-        }
-
-        /// <summary>
-        /// Actualiza la información de un estudiante. Accesible por el propio estudiante o un Admin.
-        /// </summary>
-        /// <param name="id">ID del estudiante a actualizar.</param>
-        /// <param name="updateDto">Datos a actualizar.</param>
-        /// <returns>El estudiante actualizado.</returns>
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = "Administrador,Estudiante")]
+        [ServiceFilter(typeof(IpRestrictionAttribute))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StudentResponseDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> UpdateStudent(int id, [FromBody] StudentUpdateDto updateDto)
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> UpdateStudent(int id, [FromBody] StudentUpdateDto studentDto)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
-
-            if (userId == null || userRole == null)
-            {
-                return Forbid();
-            }
-
-            // Permite al estudiante actualizar solo su propio perfil, a menos que sea un Admin
-            if (userRole != "Admin" && userId != id.ToString())
-            {
-                return Forbid();
-            }
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+
+            if (userRole == "Estudiante" && userId != id.ToString())
+            {
+                return Forbid("No tienes permiso para actualizar este perfil de estudiante.");
+            }
+
             try
             {
-                var updatedStudent = await _studentService.UpdateStudentAsync(id, updateDto);
+                var updatedStudent = await _studentService.UpdateStudentAsync(id, studentDto);
                 if (updatedStudent == null)
                 {
                     return NotFound($"Estudiante con ID {id} no encontrado.");
                 }
+                _logger.LogInformation("Estudiante con ID {Id} actualizado exitosamente.", id);
                 return Ok(updatedStudent);
             }
-            catch (ArgumentException ex)
+            catch (InvalidOperationException ex)
             {
-                return BadRequest(new { message = ex.Message });
+                _logger.LogWarning("Conflicto al actualizar estudiante {Id}: {Message}", id, ex.Message);
+                return Conflict(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar estudiante con ID {Id}.", id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor.");
             }
         }
 
-        /// <summary>
-        /// Elimina un estudiante por su ID. Solo accesible por Admin.
-        /// </summary>
-        /// <param name="id">ID del estudiante a eliminar.</param>
-        /// <returns>Respuesta de no contenido si es exitoso.</returns>
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")] // Solo Admin puede eliminar estudiantes
+        [Authorize(Roles = "Administrador")]
+        [ServiceFilter(typeof(IpRestrictionAttribute))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> DeleteStudent(int id)
         {
             var result = await _studentService.DeleteStudentAsync(id);
@@ -168,6 +140,7 @@ namespace InscripcionApi.Controllers
             {
                 return NotFound($"Estudiante con ID {id} no encontrado.");
             }
+            _logger.LogInformation("Estudiante con ID {Id} eliminado exitosamente.", id);
             return NoContent();
         }
     }

@@ -4,12 +4,13 @@ namespace InscripcionApi.Repositories.Interfaces
 {
     public interface ISemesterEnrollmentRepository
     {
-        Task<SemesterEnrollment?> GetByIdAsync(int id);
+        Task<IEnumerable<SemesterEnrollment>> GetAllEnrollmentsAsync(int page, int pageSize);
+        Task<SemesterEnrollment?> GetEnrollmentByIdAsync(int id);
         Task<SemesterEnrollment?> GetActiveEnrollmentByStudentIdAsync(int studentId);
-        Task<IEnumerable<SemesterEnrollment>> GetAllByStudentIdAsync(int studentId, int page, int pageSize);
-        Task AddAsync(SemesterEnrollment enrollment);
-        Task UpdateAsync(SemesterEnrollment enrollment);
-        Task DeleteAsync(SemesterEnrollment enrollment);
-        Task<int> CountByStudentIdAsync(int studentId);
+        Task AddEnrollmentAsync(SemesterEnrollment enrollment);
+        Task UpdateEnrollmentAsync(SemesterEnrollment enrollment);
+        Task DeleteEnrollmentAsync(int id);
+        Task<bool> EnrollmentExistsAsync(int id);
+        Task SaveChangesAsync();
     }
 }

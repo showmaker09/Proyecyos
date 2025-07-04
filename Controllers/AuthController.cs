@@ -1,13 +1,11 @@
 using InscripcionApi.Dtos.Auth;
 using InscripcionApi.Services.Interfaces;
-using InscripcionApi.Security; // Para el filtro de IP
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InscripcionApi.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
@@ -19,37 +17,23 @@ namespace InscripcionApi.Controllers
             _logger = logger;
         }
 
-        /// <summary>
-        /// Autentica a un usuario estudiante y devuelve un token JWT.
-        /// Este endpoint está protegido por la restricción de IP.
-        /// </summary>
-        /// <param name="loginDto">Credenciales de login del estudiante.</param>
-        /// <returns>Token JWT si la autenticación es exitosa.</returns>
         [HttpPost("login")]
-        //[ServiceFilter(typeof(IpRestrictionAttribute))] // Aplicar el filtro de IP
-        [AllowAnonymous] // Permitir acceso sin autorización previa
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            _logger.LogInformation("Intentando iniciar sesión para el usuario: {Username}", loginDto.Username);
 
-            _logger.LogInformation($"Intento de login para usuario: {loginDto.Username} desde IP: {HttpContext.Connection.RemoteIpAddress}");
-
-            var token = await _authService.AuthenticateAsync(loginDto);
+            var token = await _authService.AuthenticateStudent(loginDto.Username, loginDto.Password);
 
             if (token == null)
             {
-                _logger.LogWarning($"Fallo de login para usuario: {loginDto.Username}");
-                return Unauthorized(new { message = "Credenciales inválidas." });
+                _logger.LogWarning("Autenticación fallida para el usuario: {Username}", loginDto.Username);
+                return Unauthorized("Credenciales inválidas.");
             }
 
-            _logger.LogInformation($"Login exitoso para usuario: {loginDto.Username}");
-            return Ok(new { token });
+            _logger.LogInformation("Usuario {Username} autenticado exitosamente.", loginDto.Username);
+            return Ok(new { Token = token });
         }
     }
 }

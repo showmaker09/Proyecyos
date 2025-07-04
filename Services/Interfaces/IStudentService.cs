@@ -5,10 +5,10 @@ namespace InscripcionApi.Services.Interfaces
 {
     public interface IStudentService
     {
+        Task<StudentResponseDto?> RegisterStudentAsync(StudentCreateDto studentDto);
+        Task<IEnumerable<StudentResponseDto>> GetAllStudentsAsync(int page, int pageSize);
         Task<StudentResponseDto?> GetStudentByIdAsync(int id);
-        Task<(IEnumerable<StudentResponseDto>, int totalItems)> GetAllStudentsAsync(int page, int pageSize);
-        Task<StudentResponseDto> CreateStudentAsync(StudentCreateDto createDto);
-        Task<StudentResponseDto?> UpdateStudentAsync(int id, StudentUpdateDto updateDto);
+        Task<StudentResponseDto?> UpdateStudentAsync(int id, StudentUpdateDto studentDto);
         Task<bool> DeleteStudentAsync(int id);
     }
 }

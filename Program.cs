@@ -4,85 +4,25 @@ using InscripcionApi.Repositories.Interfaces;
 using InscripcionApi.Services.Implementations;
 using InscripcionApi.Services.Interfaces;
 using InscripcionApi.Security;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.OpenApi.Models; // ¡Importante: Añade este using!
+using AutoMapper;
+using InscripcionApi.Dtos.Students;
+using InscripcionApi.Models;
+using InscripcionApi.Dtos.Enrollment;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuración para obtener la IP real del cliente detrás de un proxy (como Somee.com)
-builder.Services.Configure<ForwardedHeadersOptions>(options =>
-{
-    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-    // Opcional: Si conoces los IPs de tus proxies, puedes añadirlos para mayor seguridad.
-    // options.KnownProxies.Add(IPAddress.Parse("YOUR_PROXY_IP_HERE"));
-});
-
-// Add services to the container.
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-
-// **************************************************************************************************
-// INICIO DE LA CONFIGURACIÓN IMPORTANTE DE SWAGGER PARA JWT
-// **************************************************************************************************
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Inscripcion API", Version = "v1" });
-
-    // Define el esquema de seguridad para JWT
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "Ingresa el token JWT con el prefijo Bearer. Ejemplo: 'Bearer TU_TOKEN_AQUI'",
-    });
-
-    // Define los requisitos de seguridad globales
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] {}
-        }
-    });
-});
-// **************************************************************************************************
-// FIN DE LA CONFIGURACIÓN IMPORTANTE DE SWAGGER PARA JWT
-// **************************************************************************************************
-
-
-// Configuración de la base de datos MySQL con Entity Framework Core
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+// Configuración de la base de datos MySQL
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+);
 
-// Inyección de dependencias de Repositorios
-builder.Services.AddScoped<IStudentRepository, StudentRepository>();
-builder.Services.AddScoped<ISemesterEnrollmentRepository, SemesterEnrollmentRepository>();
-builder.Services.AddScoped<IEnrolledCourseRepository, EnrolledCourseRepository>();
-
-// Inyección de dependencias de Servicios
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
-builder.Services.AddScoped<IStudentService, StudentService>();
-
-// Inyección de dependencias del filtro de seguridad (IpRestrictionAttribute)
-builder.Services.AddTransient<IpRestrictionAttribute>();
-
-// Configuración de JWT Authentication
+// Configuración de JWT
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -101,15 +41,51 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddAuthorization(options =>
+// Configuración de Forwarded Headers para obtener la IP real detrás de un proxy
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
-    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("EstudiantePolicy", policy => policy.RequireRole("Estudiante"));
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
 });
+
+
+// Añadir AutoMapper
+builder.Services.AddAutoMapper(cfg =>
+{
+    // Mapeos para Students
+    cfg.CreateMap<Student, StudentResponseDto>();
+    cfg.CreateMap<StudentCreateDto, Student>();
+    cfg.CreateMap<StudentUpdateDto, Student>();
+
+    // Mapeos para SemesterEnrollment
+    cfg.CreateMap<SemesterEnrollment, SemesterEnrollmentResponseDto>();
+    cfg.CreateMap<StartEnrollmentDto, SemesterEnrollment>();
+
+    // Mapeos para EnrolledCourse
+    cfg.CreateMap<EnrolledCourse, EnrolledCourseResponseDto>();
+    cfg.CreateMap<EnrollCourseDto, EnrolledCourse>();
+});
+
+
+// Inyección de dependencias para Repositorios
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<ISemesterEnrollmentRepository, SemesterEnrollmentRepository>();
+builder.Services.AddScoped<IEnrolledCourseRepository, EnrolledCourseRepository>();
+
+// Inyección de dependencias para Servicios
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
+
+// Añadir filtro de IP como un servicio de tipo scoped para permitir inyección de dependencias
+builder.Services.AddScoped<IpRestrictionAttribute>();
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Usar ForwardedHeaders para obtener la IP real
+// Usar Forwarded Headers
 app.UseForwardedHeaders();
 
 // Configure the HTTP request pipeline.
@@ -121,7 +97,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Usar autenticación y autorización
 app.UseAuthentication();
 app.UseAuthorization();
 

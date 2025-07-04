@@ -14,17 +14,7 @@ namespace InscripcionApi.Repositories.Implementations
             _context = context;
         }
 
-        public async Task<Student?> GetByIdAsync(int id)
-        {
-            return await _context.Students.FindAsync(id);
-        }
-
-        public async Task<Student?> GetByEmailAsync(string email)
-        {
-            return await _context.Students.FirstOrDefaultAsync(s => s.Email == email);
-        }
-
-        public async Task<IEnumerable<Student>> GetAllAsync(int page, int pageSize)
+        public async Task<IEnumerable<Student>> GetAllStudentsAsync(int page, int pageSize)
         {
             return await _context.Students
                                  .Skip((page - 1) * pageSize)
@@ -32,32 +22,56 @@ namespace InscripcionApi.Repositories.Implementations
                                  .ToListAsync();
         }
 
-        public async Task AddAsync(Student student)
+        public async Task<Student?> GetStudentByIdAsync(int id)
         {
-            await _context.Students.AddAsync(student);
+            return await _context.Students.FindAsync(id);
+        }
+
+        public async Task<Student?> GetStudentByEmailAsync(string email)
+        {
+            return await _context.Students.FirstOrDefaultAsync(s => s.Email == email);
+        }
+
+        public async Task<Student?> GetStudentByUsernameAsync(string username)
+        {
+            return await _context.Students.FirstOrDefaultAsync(s => s.Username == username);
+        }
+
+        public async Task AddStudentAsync(Student student)
+        {
+            _context.Students.Add(student);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Student student)
+        public async Task UpdateStudentAsync(Student student)
         {
             _context.Students.Update(student);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(Student student)
+        public async Task DeleteStudentAsync(int id)
         {
-            _context.Students.Remove(student);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<int> CountAsync()
-        {
-            return await _context.Students.CountAsync();
+            var student = await _context.Students.FindAsync(id);
+            if (student != null)
+            {
+                _context.Students.Remove(student);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<bool> StudentExistsAsync(int id)
         {
-            return await _context.Students.AnyAsync(s => s.Id == id);
+            return await _context.Students.AnyAsync(e => e.Id == id);
+        }
+
+        public async Task<bool> StudentExistsByEmailAsync(string email)
+        {
+            return await _context.Students.AnyAsync(s => s.Email == email);
+        }
+
+        public async Task<bool> StudentExistsByUsernameAsync(string username)
+        {
+            return await _context.Students.AnyAsync(s => s.Username == username);
         }
     }
 }

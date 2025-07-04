@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\octavius\\Desktop\\Examen\\ApIExamen\\Inscripcion\\Inscripcion.csproj": {}
+    "C:\\Users\\Huawei\\Documents\\ExamenJoelAPI\\Proyecyos\\Inscripcion.csproj": {}
   },
   "projects": {
-    "C:\\Users\\octavius\\Desktop\\Examen\\ApIExamen\\Inscripcion\\Inscripcion.csproj": {
+    "C:\\Users\\Huawei\\Documents\\ExamenJoelAPI\\Proyecyos\\Inscripcion.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\octavius\\Desktop\\Examen\\ApIExamen\\Inscripcion\\Inscripcion.csproj",
+        "projectUniqueName": "C:\\Users\\Huawei\\Documents\\ExamenJoelAPI\\Proyecyos\\Inscripcion.csproj",
         "projectName": "Inscripcion",
-        "projectPath": "C:\\Users\\octavius\\Desktop\\Examen\\ApIExamen\\Inscripcion\\Inscripcion.csproj",
-        "packagesPath": "C:\\Users\\octavius\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\octavius\\Desktop\\Examen\\ApIExamen\\Inscripcion\\obj\\",
+        "projectPath": "C:\\Users\\Huawei\\Documents\\ExamenJoelAPI\\Proyecyos\\Inscripcion.csproj",
+        "packagesPath": "C:\\Users\\Huawei\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Huawei\\Documents\\ExamenJoelAPI\\Proyecyos\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\octavius\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Huawei\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -36,8 +36,9 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
-        }
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -90,19 +91,19 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.5, 8.0.5]"
+              "version": "[8.0.12, 8.0.12]"
             },
             {
               "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[8.0.5, 8.0.5]"
+              "version": "[8.0.12, 8.0.12]"
             },
             {
               "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.5, 8.0.5]"
+              "version": "[8.0.12, 8.0.12]"
             },
             {
               "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[8.0.5, 8.0.5]"
+              "version": "[8.0.12, 8.0.12]"
             }
           ],
           "frameworkReferences": {
@@ -113,7 +114,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100-preview.6.24328.19/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -1,4 +1,4 @@
-using InscripcionApi.Dtos.Auth;
+using InscripcionApi.Models;
 using InscripcionApi.Repositories.Interfaces;
 using InscripcionApi.Services.Interfaces;
 using Microsoft.IdentityModel.Tokens;
@@ -20,46 +20,60 @@ namespace InscripcionApi.Services.Implementations
             _configuration = configuration;
         }
 
-        public async Task<string?> AuthenticateAsync(LoginDto loginDto)
+        public async Task<string?> AuthenticateStudent(string username, string password) // Cambiado de email a username
         {
-            // Para el login, usamos el Email como username (asumiendo que el estudiante se loguea con su email)
-            var student = await _studentRepository.GetByEmailAsync(loginDto.Username);
-
-            if (student == null)
+            var student = await _studentRepository.GetStudentByUsernameAsync(username); // Buscar por username
+            if (student == null || !VerifyPasswordHash(password, student.PasswordHash, student.PasswordSalt))
             {
-                return null; // Usuario no encontrado
+                return null; // Credenciales inválidas
             }
 
-            // Verificar la contraseña usando BCrypt
-            var isPasswordValid = BCrypt.Net.BCrypt.Verify(loginDto.Password, Encoding.UTF8.GetString(student.PasswordHash));
-
-            if (!isPasswordValid)
-            {
-                return null; // Contraseña incorrecta
-            }
-
-            // Si las credenciales son válidas, generar JWT
+            // Generar JWT
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured."));
+            var issuer = _configuration["Jwt:Issuer"];
+            var audience = _configuration["Jwt:Audience"];
 
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, student.Id.ToString()),
                 new Claim(ClaimTypes.Email, student.Email),
+                new Claim(ClaimTypes.Name, student.Username), // Añadir username al claim
                 new Claim(ClaimTypes.Role, student.Role)
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddHours(Convert.ToDouble(_configuration["Jwt:ExpiresHours"] ?? "1")), // Token expira en X horas
-                Issuer = _configuration["Jwt:Issuer"],
-                Audience = _configuration["Jwt:Audience"],
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                Expires = DateTime.UtcNow.AddHours(1), // Token válido por 1 hora
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                Issuer = issuer,
+                Audience = audience
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public (byte[] passwordHash, byte[] passwordSalt) CreatePasswordHash(string password)
+        {
+            string salt = BCrypt.Net.BCrypt.GenerateSalt();
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, salt);
+            return (Encoding.UTF8.GetBytes(hashedPassword), Encoding.UTF8.GetBytes(salt));
+        }
+
+        public bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
+        {
+            try
+            {
+                string storedSaltString = Encoding.UTF8.GetString(storedSalt);
+                string storedHashString = Encoding.UTF8.GetString(storedHash);
+                return BCrypt.Net.BCrypt.Verify(password, storedHashString);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

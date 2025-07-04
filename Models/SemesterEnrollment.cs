@@ -6,7 +6,7 @@ namespace InscripcionApi.Models
     public class SemesterEnrollment
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGenerated.Identity)]
         public int Id { get; set; }
 
         [Required]

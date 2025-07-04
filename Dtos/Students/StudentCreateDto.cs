@@ -4,6 +4,11 @@ namespace InscripcionApi.Dtos.Students
 {
     public class StudentCreateDto
     {
+        [Required(ErrorMessage = "El nombre de usuario es requerido.")]
+        [StringLength(50, ErrorMessage = "El nombre de usuario no puede exceder 50 caracteres.")]
+        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "El nombre de usuario solo puede contener letras y números.")]
+        public string Username { get; set; } = string.Empty;
+
         [Required(ErrorMessage = "El nombre es requerido.")]
         [StringLength(100, ErrorMessage = "El nombre no puede exceder 100 caracteres.")]
         [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "El nombre solo puede contener letras y espacios.")]
