@@ -1,0 +1,425 @@
+openapi: 3.0.0
+info:
+  title: API de Superhéroes y Villanos # <--- Título actualizado
+  version: 1.0.0
+  description: Una API simple para gestionar superhéroes, villanos y sus aventuras.
+
+servers:
+  - url: http://localhost:3001/api # La URL base de tu API, recuerda tu app.use('/api', ...)
+
+tags:
+  - name: Héroes
+    description: Operaciones relacionadas con los superhéroes
+  - name: Villanos # <--- Nueva etiqueta para Villanos
+    description: Operaciones relacionadas con los villanos
+
+paths:
+  /heroes:
+    get:
+      summary: Obtiene todos los héroes
+      tags:
+        - Héroes
+      responses:
+        '200':
+          description: Lista de héroes obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Hero' # Referencia a la definición de Héroe
+        '500':
+          description: Error interno del servidor
+    post:
+      summary: Agrega un nuevo héroe
+      tags:
+        - Héroes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HeroInput' # Para la creación, sin ID
+      responses:
+        '201':
+          description: Héroe agregado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hero'
+        '400':
+          description: Datos de entrada inválidos
+        '500':
+          description: Error interno del servidor
+
+  /heroes/{id}:
+    put:
+      summary: Actualiza un héroe existente
+      tags:
+        - Héroes
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer # <--- Cambiado de string a integer para consistencia con parseInt
+          required: true
+          description: ID del héroe a actualizar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HeroInput' # Puedes reutilizar o hacer uno específico para update
+      responses:
+        '200':
+          description: Héroe actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hero'
+        '404':
+          description: Héroe no encontrado
+        '500':
+          description: Error interno del servidor
+    delete:
+      summary: Elimina un héroe
+      tags:
+        - Héroes
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer # <--- Cambiado de string a integer para consistencia con parseInt
+          required: true
+          description: ID del héroe a eliminar
+      responses:
+        '200':
+          description: Héroe eliminado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Héroe eliminado con éxito
+        '404':
+          description: Héroe no encontrado
+        '500':
+          description: Error interno del servidor
+
+  /heroes/city/{city}:
+    get:
+      summary: Busca héroes por ciudad
+      tags:
+        - Héroes
+      parameters:
+        - in: path
+          name: city
+          schema:
+            type: string
+          required: true
+          description: Nombre de la ciudad para buscar héroes
+      responses:
+        '200':
+          description: Lista de héroes encontrada exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Hero'
+        '500':
+          description: Error interno del servidor
+
+  /heroes/{id}/enfrentar:
+    post:
+      summary: Hace que un héroe se enfrente a un villano
+      tags:
+        - Héroes
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer # <--- Cambiado de string a integer para consistencia con parseInt
+          required: true
+          description: ID del héroe que enfrentará
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                villain:
+                  type: string
+                  description: Nombre o alias del villano a enfrentar
+                  example: Joker
+              required:
+                - villain # <--- Añadido 'required' para el campo villain
+      responses:
+        '200':
+          description: Enfrentamiento registrado exitosamente
+          content:
+            application/json:
+              schema: # <--- Esquema actualizado para reflejar el objeto battleResult
+                type: object
+                properties:
+                  hero:
+                    type: object
+                    properties:
+                      id: { type: integer }
+                      alias: { type: string }
+                      name: { type: string }
+                  villain:
+                    type: object
+                    properties:
+                      id: { type: integer }
+                      alias: { type: string }
+                      name: { type: string }
+                  
+          description: Héroe o villano no encontrado
+          content: # <--- Añadido content para 404
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Héroe no encontrado
+        '500':
+          description: Error interno del servidor
+
+  # --- RUTAS DE VILLANOS ---
+  /villains: # <--- Nuevas rutas para villanos
+    get:
+      summary: Obtiene todos los villanos
+      tags:
+        - Villanos
+      responses:
+        '200':
+          description: Lista de villanos obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Villain'
+        '500':
+          description: Error interno del servidor
+    post:
+      summary: Agrega un nuevo villano
+      tags:
+        - Villanos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VillainInput'
+      responses:
+        '201':
+          description: Villano agregado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Villain'
+        '400':
+          description: Datos de entrada inválidos
+        '500':
+          description: Error interno del servidor
+
+  /villains/{id}: # <--- Rutas para operaciones con ID de villano
+    get:
+      summary: Obtiene un villano por ID
+      tags:
+        - Villanos
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID del villano a obtener
+      responses:
+        '200':
+          description: Villano encontrado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Villain'
+        '404':
+          description: Villano no encontrado
+        '500':
+          description: Error interno del servidor
+    put:
+      summary: Actualiza un villano existente
+      tags:
+        - Villanos
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID del villano a actualizar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VillainInput' # Reutiliza el input para PUT
+      responses:
+        '200':
+          description: Villano actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Villain'
+        '404':
+          description: Villano no encontrado
+        '500':
+          description: Error interno del servidor
+    delete:
+      summary: Elimina un villano
+      tags:
+        - Villanos
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID del villano a eliminar
+      responses:
+        '200':
+          description: Villano eliminado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Villano eliminado con éxito
+        '404':
+          description: Villano no encontrado
+        '500':
+          description: Error interno del servidor
+
+  /villains/city/{city}: # <--- Ruta para buscar villanos por ciudad
+    get:
+      summary: Busca villanos por ciudad
+      tags:
+        - Villanos
+      parameters:
+        - in: path
+          name: city
+          schema:
+            type: string
+          required: true
+          description: Nombre de la ciudad para buscar villanos
+      responses:
+        '200':
+          description: Lista de villanos encontrada exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Villain'
+        '500':
+          description: Error interno del servidor
+
+
+components:
+  schemas:
+    Hero:
+      type: object
+      properties:
+        id:
+          type: integer # <--- Cambiado de string a integer
+          readOnly: true
+        name:
+          type: string
+          example: Peter Parker
+        alias:
+          type: string
+          example: Spider-Man
+        city:
+          type: string
+          example: New York
+        team:
+          type: string
+          example: Avengers
+        # powerLevel: # Descomenta si decides usar powerLevel más adelante
+        #   type: integer
+        #   example: 50
+      required:
+        - name
+        - alias
+    HeroInput: # Schema para la entrada (POST/PUT), donde no se envía el ID
+      type: object
+      properties:
+        name:
+          type: string
+          example: Peter Parker
+        alias:
+          type: string
+          example: Spider-Man
+        city:
+          type: string
+          example: New York
+        team:
+          type: string
+          example: Avengers
+        # powerLevel: # Descomenta si decides usar powerLevel más adelante
+        #   type: integer
+        #   example: 50
+      required:
+        - name
+        - alias
+    # --- ESQUEMAS DE VILLANOS ---
+    Villain: # <--- Nuevo esquema para el modelo Villain
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          example: Joker
+        alias:
+          type: string
+          example: Clown Prince of Crime
+        powers:
+          type: array
+          items:
+            type: string
+          example: ["Chaos Incarnate", "Criminal Mastermind"]
+        # powerLevel: # Descomenta si decides usar powerLevel más adelante
+        #   type: integer
+        #   example: 45
+      required:
+        - name
+        - alias
+    VillainInput: # <--- Nuevo esquema para la entrada de datos de Villain (POST/PUT)
+      type: object
+      properties:
+        name:
+          type: string
+          example: Joker
+        alias:
+          type: string
+          example: Clown Prince of Crime
+        powers:
+          type: array
+          items:
+            type: string
+          example: ["Chaos Incarnate", "Criminal Mastermind"]
+        # powerLevel: # Descomenta si decides usar powerLevel más adelante
+        #   type: integer
+        #   example: 45
+      required:
+        - name
+        - alias
