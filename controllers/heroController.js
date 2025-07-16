@@ -93,55 +93,55 @@ router.post('/heroes/:id/enfrentar', async (req, res) => {
 });
 
 
-// nuevo router verificar si esto falla::
-router.post(
-  '/heroes/team-battle',
-  [
-    body('heroIds')
-      .isArray({ min: 3, max: 3 })
-      .withMessage('Debe proporcionar exactamente 3 IDs para héroes.')
-      .bail()
-      .custom(value => value.every(id => typeof id === 'number' && id > 0))
-      .withMessage('Los IDs de héroes deben ser números enteros positivos.'),
-    body('villainIds')
-      .isArray({ min: 3, max: 3 })
-      .withMessage('Debe proporcionar exactamente 3 IDs para villanos.')
-      .bail()
-      .custom(value => value.every(id => typeof id === 'number' && id > 0))
-      .withMessage('Los IDs de villanos deben ser números enteros positivos.'),
-   
-   
-      // INICIO DE CAMBIO: Validación del nuevo campo damageType verificar si esto falla
-      body('damageType')
-            .not().isEmpty().withMessage('El tipo de daño es requerido.')
-            .bail()
-            .isIn(['basic', 'power', 'critical']).withMessage('Tipo de daño inválido. Los valores permitidos son: basic, power, critical.'),
-        // FIN DE CAMBIO
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-     // se hicieron algunos cambios en el servicio heroService.teamBattle para incluir el nuevo campo damageType
-    try {
-      const { heroIds, villainIds, damageType } = req.body; // se agrega el nuevo campo damageType
-      const battleResult = await heroService.teamBattle(heroIds, villainIds, damageType); // se pasa el nuevo campo damageType al servicio
-      res.json(battleResult);
-    } catch (err) {
-      // Manejo de errores más específico
-      if (err.message.includes('No se encontraron todos los')) {
-        return res.status(404).json({ error: err.message });
+  // nuevo router verificar si esto falla::
+  router.post(
+    '/heroes/team-battle',
+    [
+      body('heroIds')
+        .isArray({ min: 3, max: 3 })
+        .withMessage('Debe proporcionar exactamente 3 IDs para héroes.')
+        .bail()
+        .custom(value => value.every(id => typeof id === 'number' && id > 0))
+        .withMessage('Los IDs de héroes deben ser números enteros positivos.'),
+      body('villainIds')
+        .isArray({ min: 3, max: 3 })
+        .withMessage('Debe proporcionar exactamente 3 IDs para villanos.')
+        .bail()
+        .custom(value => value.every(id => typeof id === 'number' && id > 0))
+        .withMessage('Los IDs de villanos deben ser números enteros positivos.'),
+    
+    
+        // INICIO DE CAMBIO: Validación del nuevo campo damageType verificar si esto falla
+        body('damageType')
+              .not().isEmpty().withMessage('El tipo de daño es requerido.')
+              .bail()
+              .isIn(['basic', 'power', 'critical']).withMessage('Tipo de daño inválido. Los valores permitidos son: basic, power, critical.'),
+          // FIN DE CAMBIO
+    ],
+    async (req, res) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
       }
-      if (err.message.includes('debe proporcionar exactamente')) {
-        return res.status(400).json({ error: err.message });
+      // se hicieron algunos cambios en el servicio heroService.teamBattle para incluir el nuevo campo damageType
+      try {
+        const { heroIds, villainIds, damageType } = req.body; // se agrega el nuevo campo damageType
+        const battleResult = await heroService.teamBattle(heroIds, villainIds, damageType); // se pasa el nuevo campo damageType al servicio
+        res.json(battleResult);
+      } catch (err) {
+        // Manejo de errores más específico
+        if (err.message.includes('No se encontraron todos los')) {
+          return res.status(404).json({ error: err.message });
+        }
+        if (err.message.includes('debe proporcionar exactamente')) {
+          return res.status(400).json({ error: err.message });
+        }
+        res.status(500).json({ error: err.message });
       }
-      res.status(500).json({ error: err.message });
     }
-  }
-);
+  );
 
 
 
 
-export default router
+  export default router

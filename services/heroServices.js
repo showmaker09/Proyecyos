@@ -1,6 +1,7 @@
 import heroRepository from '../repositories/heroRepository.js'
 import villainService from './villainService.js'
 import Hero from '../models/heroModel.js'
+import villainRepository from '../repositories/villainRepository.js' // Asegúrate de importar el repositorio de villanos
 //import heroRepository from '../repositories/heroRepository.js'//veriicar si esto es el problema
 
 async function getAllHeroes() {
@@ -66,24 +67,53 @@ async function findHeroesByCity(city) {
 }
 
 // esto es para enfrentar a un villano
+
+
+//NUEVAS VARIABLES PARA LA BATALLA REVISARLO ES NUEVO
+ // services/heroService.js
+
+
+// ... (tus funciones existentes como getAllHeroes, addHero, updateHero, deleteHero, findHeroesByCity, faceVillain) ...
+
+// --- DATOS FIJOS PARA LA SIMULACIÓN DE BATALLA ---
+//const BASE_HEALTH = 100;
+const BASE_DAMAGE = 15;
+//const CRITICAL_CHANCE = 0.2; // 20% de probabilidad de golpe crítico
+// const CRITICAL_MULTIPLIER = 1.5; // El daño crítico es 1.5 veces el daño normal
+const BASE_HEALTH = 100; // Define una constante para la salud base
+// services/heroService.js
+
+// ... (tus imports, BASE_HEALTH, BASE_DAMAGE, calculateDamage, y teamBattle) ...
+
+// INICIO DE CAMBIO: Modificación de la función faceVillain !MODIFIQUE !AQUI! 2:33pm
 async function faceVillain(heroId, villainId) {
-  const heroes = await heroRepository.getHeroes();
-  const hero = heroes.find(hero => hero.id === parseInt(heroId));
-  if (!hero) {
-    throw new Error('Héroe no encontrado');
-  }
- // return `${hero.alias} enfrenta a ${villain}`;
-const villain = await villainService.getVillainById(villainId); // CAMBIO CLAVE AQUÍ: Obtener el villano por ID
+    console.log(`Iniciando faceVillain: Héroe ID ${heroId} vs Villano ID ${villainId}`);
+
+    // COMENTARIO: Antes se obtenían todos los héroes y se buscaba en memoria.
+    // Ahora, se obtiene directamente el héroe por su _id usando el repositorio.
+    const hero = await heroRepository.getHeroById(heroId); // <--- CAMBIO CLAVE: Usar getHeroById
+
+    if (!hero) {
+        throw new Error(`Héroe con ID ${heroId} no encontrado.`);
+    }
+
+    // COMENTARIO: Obtener el villano por su _id usando el servicio de villanos.
+    const villain = await villainService.getVillainById(villainId);
 
     if (!villain) {
-       throw new Error(`Villano '${villainId}' no encontrado.`);
-
+        throw new Error(`Villano con ID ${villainId} no encontrado.`);
     }
-     const heroPower = hero.powerLevel || 50; // Valor por defecto si no tienen powerLevel
-    const villainPower = villain.powerLevel || 45; // Valor por defectomue
-    const herolife = hero.life || 100; // Valor por defecto si no tienen life
-    const villainlife = villain.life || 90; // Valor por defecto si no tienen life
 
+    console.log(`Héroe: ${hero.alias} (Power: ${hero.power || 50}, Health: ${hero.health || BASE_HEALTH})`);
+    console.log(`Villano: ${villain.alias} (Power: ${villain.power || 45}, Health: ${villain.health || BASE_HEALTH})`);
+
+    // COMENTARIO: Usar las propiedades 'power' y 'health' (o 'life') de los modelos
+    const heroPower = hero.power || 50; // Usar hero.power
+    const villainPower = villain.power || 45; // Usar villain.power
+
+    // COMENTARIO: No estás simulando una batalla por turnos aquí, solo una comparación de poder.
+    // Si quieres una batalla por turnos, sería más compleja y similar a teamBattle.
+    // Para esta función, mantendremos la lógica de comparación simple.
     let outcomeMessage;
     let winner = null;
 
@@ -98,29 +128,21 @@ const villain = await villainService.getVillainById(villainId); // CAMBIO CLAVE 
         winner = "Empate";
     }
 
-      const battleResult = {
-        hero: { id: hero.id, alias: hero.alias, name: hero.name, power: heroPower },
-        villain: { id: villain.id, alias: villain.alias, name: villain.name, power: villainPower },
+    const battleResult = {
+        // COMENTARIO: Usar hero._id y villain._id para la respuesta
+        hero: { id: hero._id, alias: hero.alias, name: hero.name, power: heroPower },
+        villain: { id: villain._id, alias: villain.alias, name: villain.name, power: villainPower },
         outcome: outcomeMessage,
         winner: winner,
         timestamp: new Date().toISOString()
     };
 
+    console.log('Resultado de faceVillain:', battleResult);
     return battleResult;
-
-  }
-
-//NUEVAS VARIABLES PARA LA BATALLA REVISARLO ES NUEVO
- // services/heroService.js
+}
+// FIN DE CAMBIO: Modificación de la función faceVillain  CAMBIO:2_33pm
 
 
-// ... (tus funciones existentes como getAllHeroes, addHero, updateHero, deleteHero, findHeroesByCity, faceVillain) ...
-
-// --- DATOS FIJOS PARA LA SIMULACIÓN DE BATALLA ---
-const BASE_HEALTH = 100;
-const BASE_DAMAGE = 15;
-const CRITICAL_CHANCE = 0.2; // 20% de probabilidad de golpe crítico
-const CRITICAL_MULTIPLIER = 1.5; // El daño crítico es 1.5 veces el daño normal
 
 // Función auxiliar para simular un ataque
 function calculateDamage(attackerPower,damageType) // si se agrega el nuevo campo damageType y se hicieron cambios revisar si falla
@@ -156,57 +178,74 @@ function calculateDamage(attackerPower,damageType) // si se agrega el nuevo camp
 
 
 
+// services/heroService.js
 
-// INICIO DE CAMBIO: Modificación de la función teamBattle para aceptar 'damageType'
-async function teamBattle(heroIds, villainIds, damageType)
-{ // Llave de apertura de teamBattle
-    if (heroIds.length !== 3 || villainIds.length !== 3)
-    {
+// ... (tus imports y definiciones de BASE_HEALTH, calculateDamage) ...
+
+// INICIO DE CAMBIO PRINCIPAL: Modificación de la función teamBattle
+async function teamBattle(heroIds, villainIds, damageType) {
+    console.log('Iniciando teamBattle con heroIds:', heroIds, 'villainIds:', villainIds, 'damageType:', damageType);
+
+    // Validar los IDs al principio
+    if (heroIds.length !== 3 || villainIds.length !== 3) {
         throw new Error('Debe proporcionar exactamente 3 IDs para héroes y 3 para villanos.');
     }
 
     // Validar el tipo de daño
     const validDamageTypes = ['basic', 'power', 'critical'];
-    if (!damageType || !validDamageTypes.includes(damageType))
-    {
+    if (!damageType || !validDamageTypes.includes(damageType)) {
         throw new Error(`Tipo de daño inválido: '${damageType}'. Los valores permitidos son: ${validDamageTypes.join(', ')}.`);
     }
 
-    // 1. Obtener los héroes y villanos del repositorio
-    const allHeroes = await heroRepository.getHeroes();
-    const allVillains = await villainService.getAllVillains();
+    // INICIO DE CAMBIO: Recuperación eficiente de héroes y villanos usando findById
+    // y manejando errores si no se encuentran
+    const fetchedHeroesPromises = heroIds.map(id => heroRepository.getHeroById(id));
+    const fetchedVillainsPromises = villainIds.map(id => villainRepository.getVillainById(id)); // Usar villainRepository
 
-    const heroesInBattle = heroIds.map(id => {
-        const hero = allHeroes.find(h => h.id === parseInt(id));
-        if (!hero) throw new Error(`Héroe con ID ${id} no encontrado.`);
-        return {
-            ...hero,
-            initialHealth: BASE_HEALTH,
-            remainingHealth: BASE_HEALTH,
-            powerLevel: hero.powerLevel || hero.power || 50,
-            attackType: damageType // Esto es un cambio importante
-        };
-    });
-
-    const villainsInBattle = villainIds.map(id => {
-        const villain = allVillains.find(v => v.id === parseInt(id));
-        if (!villain) throw new Error(`Villano con ID ${id} no encontrado.`);
-        return {
-            ...villain,
-            initialHealth: BASE_HEALTH,
-            remainingHealth: BASE_HEALTH,
-            powerLevel: villain.powerLevel || villain.power || 45,
-            attackType: damageType // Esto es un cambio importante
-        };
-    });
-
-    // Validar que se encontraron todos
-    if (heroesInBattle.length !== 3) {
-        throw new Error('No se encontraron todos los héroes con los IDs proporcionados.');
+    const fetchedHeroes = await Promise.all(fetchedHeroesPromises); // 
+    const fetchedVillains = await Promise.all(fetchedVillainsPromises);
+    
+    const heroesInBattle = [];
+    for (const [index, hero] of fetchedHeroes.entries()) 
+    {
+        if (!hero) 
+        {
+            throw new Error(`Héroe con ID ${heroIds[index]} no encontrado.`);
+        }
+        heroesInBattle.push(
+        {
+            _id: hero._id, // Usar _id de MongoDB
+            alias: hero.alias,
+            name: hero.name,
+            power: hero.power || 50, // Usar 'power' consistente con el modelo
+            health: hero.health || BASE_HEALTH, // Usar 'health' consistente con el modelo
+            initialHealth: hero.health || BASE_HEALTH,
+            remainingHealth: hero.health || BASE_HEALTH,
+            attackType: damageType
+        });
     }
-    if (villainsInBattle.length !== 3) {
-        throw new Error('No se encontraron todos los villanos con los IDs proporcionados.');
+
+    const villainsInBattle = [];
+    for (const [index, villain] of fetchedVillains.entries()) {
+        if (!villain) {
+            throw new Error(`Villano con ID ${villainIds[index]} no encontrado.`);
+        }
+        villainsInBattle.push({
+            _id: villain._id, // Usar _id de MongoDB
+            alias: villain.alias,
+            name: villain.name,
+            power: villain.power || 45, // Usar 'power' consistente con el modelo
+            health: villain.health || BASE_HEALTH, // Usar 'health' consistente con el modelo
+            initialHealth: villain.health || BASE_HEALTH,
+            remainingHealth: villain.health || BASE_HEALTH,
+            attackType: 'basic' // Villanos pueden tener su propia lógica de ataque si es diferente
+        });
     }
+    // FIN DE CAMBIO: Recuperación eficiente de héroes y villanos
+
+    console.log('Héroes para la batalla:', heroesInBattle.map(h => `${h.alias} (ID: ${h._id})`));
+    console.log('Villanos para la batalla:', villainsInBattle.map(v => `${v.alias} (ID: ${v._id})`));
+
 
     let round = 0;
     const battleLog = [];
@@ -221,23 +260,21 @@ async function teamBattle(heroIds, villainIds, damageType)
         for (const hero of heroesInBattle) {
             if (hero.remainingHealth <= 0) continue; // Si el héroe está KO, no ataca
 
-            // Elegir un villano aleatorio y que esté vivo para atacar
             const livingVillains = villainsInBattle.filter(v => v.remainingHealth > 0);
             if (livingVillains.length === 0) break; // Todos los villanos KO
             const targetVillain = livingVillains[Math.floor(Math.random() * livingVillains.length)];
 
-            // INICIO DE CAMBIO: Usar la nueva calculateDamage y pasar el damageType
-            const damageDealt = calculateDamage(hero.powerLevel, damageType);
+            // INICIO DE CAMBIO: Usar la nueva calculateDamage y pasar el damageType recibido
+            const damageDealt = calculateDamage(hero.power, hero.attackType); // <-- Usar hero.attackType que ya tiene damageType
             // FIN DE CAMBIO
             targetVillain.remainingHealth -= damageDealt;
 
-            // COMENTARIO: Ajusta el mensaje para reflejar el tipo de ataque en lugar de "crítico aleatorio".
             let attackDescription = '';
-            if (damageType === 'basic') attackDescription = '(Ataque Básico)';
-            else if (damageType === 'power') attackDescription = '(Ataque de Poder)';
-            else if (damageType === 'critical') attackDescription = '(¡Ataque CRÍTICO!)';
+            if (hero.attackType === 'basic') attackDescription = '(Ataque Básico)';
+            else if (hero.attackType === 'power') attackDescription = '(Ataque de Poder)';
+            else if (hero.attackType === 'critical') attackDescription = '(¡Ataque CRÍTICO!)';
 
-            battleLog.push(`${hero.alias} ataca a ${targetVillain.alias || targetVillain.name} por ${damageDealt} de daño ${attackDescription}. ${targetVillain.alias || targetVillain.name} tiene ${Math.max(0, targetVillain.remainingHealth)} de vida restante.`);
+            battleLog.push(`${hero.alias} ataca a ${targetVillain.alias} por ${damageDealt.toFixed(2)} de daño ${attackDescription}. ${targetVillain.alias} tiene ${Math.max(0, targetVillain.remainingHealth).toFixed(2)} de vida restante.`);
         }
 
         // Verificar si los héroes ganaron después de su ataque
@@ -250,24 +287,22 @@ async function teamBattle(heroIds, villainIds, damageType)
         for (const villain of villainsInBattle) {
             if (villain.remainingHealth <= 0) continue; // Si el villano está KO, no ataca
 
-            // Elegir un héroe aleatorio y que esté vivo para atacar
             const livingHeroes = heroesInBattle.filter(h => h.remainingHealth > 0);
             if (livingHeroes.length === 0) break; // Todos los héroes KO
             const targetHero = livingHeroes[Math.floor(Math.random() * livingHeroes.length)];
 
-            // INICIO DE CAMBIO: Usar la nueva calculateDamage y pasar el damageType
-            const damageDealt = calculateDamage(villain.powerLevel, damageType); // <-- PASA damageType
+            // INICIO DE CAMBIO: Usar calculateDamage para villanos
+            // COMENTARIO: Si los villanos SIEMPRE hacen 'basic' daño, puedes usar 'basic' aquí,
+            // o puedes permitir que tengan su propio `attackType` en el futuro.
+            const damageDealt = calculateDamage(villain.power, villain.attackType); // <-- Usar villain.attackType
             // FIN DE CAMBIO
 
             targetHero.remainingHealth -= damageDealt;
 
-            // COMENTARIO: Ajusta el mensaje para reflejar el tipo de ataque.
             let attackDescription = '';
-            if (damageType === 'basic') attackDescription = '(Ataque Básico)';
-            else if (damageType === 'power') attackDescription = '(Ataque de Poder)';
-            else if (damageType === 'critical') attackDescription = '(¡Ataque CRÍTICO!)';
+            if (villain.attackType === 'basic') attackDescription = '(Ataque Básico)';
 
-            battleLog.push(`${villain.alias || villain.name} ataca a ${targetHero.alias} por ${damageDealt} de daño ${attackDescription}. ${targetHero.alias} tiene ${Math.max(0, targetHero.remainingHealth)} de vida restante.`);
+            battleLog.push(`${villain.alias} ataca a ${targetHero.alias} por ${damageDealt.toFixed(2)} de daño ${attackDescription}. ${targetHero.alias} tiene ${Math.max(0, targetHero.remainingHealth).toFixed(2)} de vida restante.`);
         }
 
         // Verificar si los villanos ganaron después de su ataque
@@ -298,44 +333,43 @@ async function teamBattle(heroIds, villainIds, damageType)
 
     return {
         message: finalMessage,
-        battleDetails: { // Llave de apertura de battleDetails
+        battleDetails: {
             heroes: heroesInBattle.map(h => (
-                { // Llave de apertura del objeto héroe mapeado
-                    id: h.id,
+                {
+                    id: h._id, // Usar _id para la respuesta
                     alias: h.alias,
                     name: h.name,
-                    power: h.powerLevel || 50,
+                    power: h.power,
                     initialHealth: h.initialHealth,
                     remainingHealth: Math.max(0, h.remainingHealth),
                     attackTypeChosen: h.attackType // Mostrar el tipo de ataque que se utilizó
-                } // Llave de cierre del objeto héroe mapeado
+                }
             )),
             villains: villainsInBattle.map(v => (
-                { // Llave de apertura del objeto villano mapeado
-                    id: v.id,
+                {
+                    id: v._id, // Usar _id para la respuesta
                     alias: v.alias,
                     name: v.name,
-                    power: v.powerLevel || 45,
+                    power: v.power,
                     initialHealth: v.initialHealth,
                     remainingHealth: Math.max(0, v.remainingHealth),
                     attackTypeChosen: v.attackType // Mostrar el tipo de ataque que se utilizó
-                } // Llave de cierre del objeto villano mapeado
+                }
             )),
             winner: winner,
             loser: (winner.includes("Héroes") && !winner.includes("Empate")) ? "Equipo de Villanos" :
                    (winner.includes("Villanos") && !winner.includes("Empate")) ? "Equipo de Héroes" : "Ninguno",
             roundsFought: round,
             log: battleLog
-        } // Llave de cierre de battleDetails
+        }
     };
-} // Llave de cierre de teamBattle
+}
+// FIN DE CAMBIO PRINCIPAL: Función teamBattle
 
-
-// Asegúrate de que `getAllHeroes`, `addHero`, `updateHero`, `deleteHero`, `findHeroesByCity`, `faceVillain`, `getHeroById`
-// estén definidas en este mismo archivo, o importadas de alguna parte.
-// Si no están definidas, este `export default` podría causar un error de referencia.
+// ... (asegúrate de que todas tus funciones como getAllHeroes, addHero, etc., estén definidas o importadas antes del export default)
+// Si estas funciones ya están definidas en este archivo, este `export default` está bien.
 export default {
-    // Si estas funciones están definidas en este archivo, deben ser declaradas antes de ser exportadas.
+    teamBattle,
      getAllHeroes,
      addHero,
      updateHero,
@@ -343,6 +377,5 @@ export default {
      findHeroesByCity,
      faceVillain,
      getHeroById,
-     teamBattle,
-     calculateDamage // También exporta calculateDamage si necesitas que sea accesible fuera de este módulo
-}
+     calculateDamage // Si calculateDamage no se exporta globalmente, puedes exportarlo aquí
+};

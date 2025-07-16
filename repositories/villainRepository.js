@@ -1,6 +1,6 @@
-import fs from 'fs-extra'
+//import fs from 'fs-extra'
 import Villain from '../models/villainModel.js'
-
+import mongoose from 'mongoose' // Importa mongoose para manejar la base de datos MongoDB
 // const filePath = './data/villains.json' // Verificar la ruta que tu configuraste en tu proyecto.
 
 async function getVillains() {
@@ -8,8 +8,11 @@ async function getVillains() {
     {
         const villains = await Villain.find({}); // Obtiene todos los villanos de la base de datos
         return villains; // Retorna los villanos obtenidos
-    } catch (error) {
-        console.error(error)
+    } 
+    catch (error) 
+    {
+        console.error("Error al obtener villanos de MongoDB:", error); // Mensaje de error más específico
+        throw new Error('Error al obtener villanos.');
     }
 
 }
@@ -19,10 +22,7 @@ async function getVillains() {
     try 
     {
 
-        if (!mongoose.Types.ObjectId.isValid(id)) 
-        {
-            throw new Error('ID de villano inválido.');
-        }
+        
         const villain = await Villain.findById(id); // Busca un villano por su ID
         if (!villain) 
         {

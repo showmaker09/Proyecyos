@@ -1,18 +1,23 @@
 // models/heroModel.js
 import mongoose from 'mongoose'; // Importa mongoose para definir el esquema del modelo
+
 // Define el esquema del héroe
-//SE NECESITA IMPORTAR MONGOOSE PARA DEFINIR EL ESQUEMA DEL MODELO
 const heroSchema = mongoose.Schema(
     {
+        _id: { // <--- Agrega esta definición para el _id
+            type: Number,
+           // required: true, // Asume que tus IDs siempre estarán presentes
+            //unique: true // Asegura que tus IDs sean únicos
+        },
         name: {
             type: String,
             required: true,
-            trim: true, // Elimina espacios en blanco al inicio/final
+            trim: true,
         },
         alias: {
             type: String,
             required: true,
-            unique: true, // Asegura que cada alias sea único
+            unique: true,
             trim: true,
         },
         city: {
@@ -23,21 +28,21 @@ const heroSchema = mongoose.Schema(
             type: String,
             default: 'Unaffiliated',
         },
-        // Añade campos para el poder y la salud si no los tienes en tu modelo Hero
         power: {
             type: Number,
-            default: 50, // Valor por defecto
+            default: 50,
         },
         health: {
             type: Number,
-            default: 100, // Valor por defecto
+            default: 100,
         },
     },
     {
-        timestamps: true, // Añade automáticamente createdAt y updatedAt
+        timestamps: true,
+        _id: false // <--- IMPORTANTE: Esto le dice a Mongoose que no genere un _id automáticamente si ya le estamos pasando uno.
     }
 );
 
-const Hero = mongoose.model('Hero', heroSchema); // Crea el modelo Hero a partir del esquema definido
+const Hero = mongoose.model('Hero', heroSchema);
 
 export default Hero;

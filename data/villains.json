@@ -1,491 +1,491 @@
 [
   {
-    "id": 1,
+    "_id": 1,
     "name": "Alexander Luthor Jr.",
     "alias": "Lex Luthor",
     "city": "Metrópolis",
     "team": "Legión del Mal"
   },
   {
-    "id": 2,
+    "_id": 2,
     "name": "Jonathan Crane",
-    "alias": "Espantapájaros",
+    "alias": "Espantapájaros-89",
     "city": "Gotham City",
     "team": "Ninguno"
   },
   {
-    "id": 3,
+    "_id": 3,
     "name": "Harleen Quinzel",
     "alias": "Harley Quinn",
     "city": "Gotham City",
     "team": "Escuadrón Suicida"
   },
   {
-    "id": 4,
+    "_id": 4,
     "name": "Joker",
     "alias": "El Joker",
     "city": "Gotham City",
     "team": "Ninguno"
   },
   {
-    "id": 5,
+    "_id": 5,
     "name": "Edward Nygma",
     "alias": "Acertijo",
     "city": "Gotham City",
     "team": "Ninguno"
   },
   {
-    "id": 6,
+    "_id": 6,
     "name": "Oswald Cobblepot",
     "alias": "Pingüino",
     "city": "Gotham City",
     "team": "Ninguno"
   },
   {
-    "id": 7,
+    "_id": 7,
     "name": "Harvey Dent",
     "alias": "Dos Caras",
     "city": "Gotham City",
     "team": "Ninguno"
   },
   {
-    "id": 8,
+    "_id": 8,
     "name": "Slade Wilson",
-    "alias": "Deathstroke",
+    "alias": "Deathstroke-67",
     "city": "Ciudad Star",
     "team": "Ninguno"
   },
   {
-    "id": 9,
+    "_id": 9,
     "name": "Eobard Thawne",
     "alias": "Profesor Zoom",
     "city": "Siglo 25",
     "team": "Ninguno"
   },
   {
-    "id": 10,
+    "_id": 10,
     "name": "Leonard Snart",
-    "alias": "Capitán Frío",
+    "alias": "Capitán Frío-44",
     "city": "Central City",
     "team": "Los Renegados"
   },
   {
-    "id": 11,
+    "_id": 11,
     "name": "Thaal Sinestro",
-    "alias": "Sinestro",
+    "alias": "Sinestro-44",
     "city": "Korugar",
     "team": "Cuerpo de Sinestro"
   },
   {
-    "id": 12,
+    "_id": 12,
     "name": "Brainiac",
-    "alias": "Brainiac",
+    "alias": "Brainiac-6",
     "city": "Colu",
     "team": "Ninguno"
   },
   {
-    "id": 13,
+    "_id": 13,
     "name": "General Zod",
-    "alias": "General Zod",
+    "alias": "General Zod-24",
     "city": "Krypton (anteriormente)",
     "team": "Ninguno"
   },
   {
-    "id": 14,
+    "_id": 14,
     "name": "Doomsday",
-    "alias": "Doomsday",
+    "alias": "Doomsday-45",
     "city": "Krypton (anteriormente)",
     "team": "Ninguno"
   },
   {
-    "id": 15,
+    "_id": 15,
     "name": "Darkseid",
     "alias": "Darkseid",
     "city": "Apokolips",
     "team": "Ninguno"
   },
   {
-    "id": 16,
+    "_id": 16,
     "name": "Circe",
     "alias": "Circe",
     "city": "Aeaea",
     "team": "Ninguno"
   },
   {
-    "id": 17,
+    "_id": 17,
     "name": "Ares",
     "alias": "Ares",
     "city": "Olimpo",
     "team": "Dioses del Olimpo"
   },
   {
-    "id": 18,
+    "_id": 18,
     "name": "Gorilla Grodd",
-    "alias": "Gorilla Grodd",
+    "alias": "Gorilla Grodd-67",
     "city": "Gorilla City",
     "team": "Legión del Mal"
   },
   {
-    "id": 19,
+    "_id": 19,
     "name": "Black Manta",
-    "alias": "Black Manta",
+    "alias": "Black Manta-8",
     "city": "Ninguna",
     "team": "Legión del Mal"
   },
   {
-    "id": 20,
+    "_id": 20,
     "name": "Reverse-Flash",
     "alias": "Reverse-Flash",
     "city": "Ciudad Central",
     "team": "Ninguno"
   },
   {
-    "id": 21,
+    "_id": 21,
     "name": "Vandal Savage",
     "alias": "Vandal Savage",
     "city": "Ninguna",
     "team": "Sociedad Secreta de Supervillanos"
   },
   {
-    "id": 22,
+    "_id": 22,
     "name": "Deathstroke",
     "alias": "Deathstroke",
     "city": "Ninguna",
     "team": "Ninguno"
   },
   {
-    "id": 23,
+    "_id": 23,
     "name": "Ra's al Ghul",
-    "alias": "Ra's al Ghul",
+    "alias": "Ra's al Ghul-23",
     "city": "Ninguna",
     "team": "Liga de Asesinos"
   },
   {
-    "id": 24,
+    "_id": 24,
     "name": "Bane",
     "alias": "Bane",
     "city": "Santa Prisca",
     "team": "Ninguno"
   },
   {
-    "id": 25,
+    "_id": 25,
     "name": "Victor Fries",
-    "alias": "Mr. Freeze",
+    "alias": "Mr. Freeze-77",
     "city": "Gotham City",
     "team": "Ninguno"
   },
   {
-    "id": 26,
+    "_id": 26,
     "name": "Pamela Isley",
-    "alias": "Poison Ivy",
+    "alias": "Poison Ivy-55",
     "city": "Gotham City",
     "team": "Ninguno"
   },
   {
-    "id": 27,
+    "_id": 27,
     "name": "Waylon Jones",
-    "alias": "Killer Croc",
+    "alias": "Killer Croc-22",
     "city": "Gotham City",
     "team": "Ninguno"
   },
   {
-    "id": 28,
+    "_id": 28,
     "name": "Adrian Toomes",
     "alias": "Vulture",
     "city": "Nueva York",
     "team": "Seis Siniestros"
   },
   {
-    "id": 29,
+    "_id": 29,
     "name": "Otto Octavius",
     "alias": "Doctor Octopus",
     "city": "Nueva York",
     "team": "Seis Siniestros"
   },
   {
-    "id": 30,
+    "_id": 30,
     "name": "Norman Osborn",
     "alias": "Duende Verde",
     "city": "Nueva York",
     "team": "Seis Siniestros"
   },
   {
-    "id": 31,
+    "_id": 31,
     "name": "Pamela Lillian Isley",
     "alias": "Hiedra Venenosa",
     "city": "Gotham City",
     "team": "Sociedad Secreta de Supervillanos"
   },
   {
-    "id": 32,
+    "_id": 32,
     "name": "Jonathan Crane",
     "alias": "Espantapájaros",
     "city": "Gotham City",
     "team": "Ninguno"
   },
   {
-    "id": 33,
+    "_id": 33,
     "name": "Roman Sionis",
     "alias": "Máscara Negra",
     "city": "Gotham City",
     "team": "Ninguno"
   },
   {
-    "id": 34,
+    "_id": 34,
     "name": "Floyd Lawton",
     "alias": "Deadshot",
     "city": "Ciudad Star",
     "team": "Escuadrón Suicida"
   },
   {
-    "id": 35,
+    "_id": 35,
     "name": "Waylon Jones",
     "alias": "Killer Croc",
     "city": "Gotham City",
     "team": "Ninguno"
   },
   {
-    "id": 36,
+    "_id": 36,
     "name": "Victor Zsasz",
     "alias": "Zsasz",
     "city": "Gotham City",
     "team": "Ninguno"
   },
   {
-    "id": 37,
+    "_id": 37,
     "name": "Thomas Elliot",
     "alias": "Hush",
     "city": "Gotham City",
     "team": "Ninguno"
   },
   {
-    "id": 38,
+    "_id": 38,
     "name": "Scarecrow",
-    "alias": "Espantapájaros",
+    "alias": "Espantapájaros-78",
     "city": "Gotham City",
     "team": "Ninguno"
   },
   {
-    "id": 39,
+    "_id": 39,
     "name": "Mister Freeze",
     "alias": "Mr. Frío",
     "city": "Gotham City",
     "team": "Ninguno"
   },
   {
-    "id": 40,
+    "_id": 40,
     "name": "Clayface",
     "alias": "Cara de Barro",
     "city": "Gotham City",
     "team": "Ninguno"
   },
   {
-    "id": 41,
+    "_id": 41,
     "name": "Solomon Grundy",
     "alias": "Solomon Grundy",
     "city": "Slaughter Swamp",
     "team": "Legión del Mal"
   },
   {
-    "id": 42,
+    "_id": 42,
     "name": "Livewire",
     "alias": "Livewire",
     "city": "Metrópolis",
     "team": "Ninguno"
   },
   {
-    "id": 43,
+    "_id": 43,
     "name": "Toyman",
     "alias": "Toyman",
     "city": "Metrópolis",
     "team": "Ninguno"
   },
   {
-    "id": 44,
+    "_id": 44,
     "name": "Maxwell Lord",
     "alias": "Maxwell Lord",
     "city": "Nueva York",
     "team": "Checkmate"
   },
   {
-    "id": 45,
+    "_id": 45,
     "name": "Desaad",
     "alias": "Desaad",
     "city": "Apokolips",
     "team": "Elite de Darkseid"
   },
   {
-    "id": 46,
+    "_id": 46,
     "name": "Granny Goodness",
     "alias": "Abuela Bondad",
     "city": "Apokolips",
     "team": "Elite de Darkseid"
   },
   {
-    "id": 47,
+    "_id": 47,
     "name": "Steppenwolf",
     "alias": "Steppenwolf",
     "city": "Apokolips",
     "team": "Elite de Darkseid"
   },
   {
-    "id": 48,
+    "_id": 48,
     "name": "Cheetah",
     "alias": "Cheetah",
     "city": "Ninguna",
     "team": "Legión del Mal"
   },
   {
-    "id": 49,
+    "_id": 49,
     "name": "Felix Faust",
     "alias": "Felix Faust",
     "city": "Ninguna",
     "team": "Ninguno"
   },
   {
-    "id": 50,
+    "_id": 50,
     "name": "Bizarro",
     "alias": "Bizarro",
     "city": "Mundo Bizarro",
     "team": "Ninguno"
   },
   {
-    "id": 51,
+    "_id": 51,
     "name": "General Wade Eiling",
     "alias": "El General",
     "city": "Ninguna",
     "team": "Ninguno"
   },
   {
-    "id": 52,
+    "_id": 52,
     "name": "Giganta",
     "alias": "Giganta",
     "city": "Ninguna",
     "team": "Legión del Mal"
   },
   {
-    "id": 53,
+    "_id": 53,
     "name": "Silver Banshee",
     "alias": "Silver Banshee",
     "city": "Irlanda",
     "team": "Ninguno"
   },
   {
-    "id": 54,
+    "_id": 54,
     "name": "Parasite",
     "alias": "Parasite",
     "city": "Metrópolis",
     "team": "Ninguno"
   },
   {
-    "id": 55,
+    "_id": 55,
     "name": "Mr. Mxyzptlk",
     "alias": "Mr. Mxyzptlk",
     "city": "Quinta Dimensión",
     "team": "Ninguno"
   },
   {
-    "id": 56,
+    "_id": 56,
     "name": "Black Adam",
     "alias": "Black Adam",
     "city": "Kahndaq",
     "team": "Ninguno"
   },
   {
-    "id": 57,
+    "_id": 57,
     "name": "Captain Boomerang",
     "alias": "Capitán Bumerang",
     "city": "Central City",
     "team": "Los Renegados"
   },
   {
-    "id": 58,
+    "_id": 58,
     "name": "Trickster",
     "alias": "Trickster",
     "city": "Central City",
     "team": "Los Renegados"
   },
   {
-    "id": 59,
+    "_id": 59,
     "name": "Gorilla Grodd",
     "alias": "Gorila Grodd",
     "city": "Ciudad Gorila",
     "team": "Legión del Mal"
   },
   {
-    "id": 60,
+    "_id": 60,
     "name": "Mirror Master",
     "alias": "Amo de los Espejos",
     "city": "Central City",
     "team": "Los Renegados"
   },
   {
-    "id": 61,
+    "_id": 61,
     "name": "David Hyde",
-    "alias": "Black Manta",
+    "alias": "Black Manta-45",
     "city": "Ninguna",
     "team": "Legión del Mal"
   },
   {
-    "id": 62,
+    "_id": 62,
     "name": "Doctor Sivana",
     "alias": "Doctor Sivana",
     "city": "Fawcett City",
     "team": "Ninguno"
   },
   {
-    "id": 63,
+    "_id": 63,
     "name": "Mister Mind",
     "alias": "Mister Mind",
     "city": "Venus (originalmente)",
     "team": "Monster Society of Evil"
   },
   {
-    "id": 64,
+    "_id": 64,
     "name": "Deathstroke",
-    "alias": "Deathstroke el Terminator",
+    "alias": "Deathstroke el Terminator-89",
     "city": "Ninguna",
     "team": "Ninguno"
   },
   {
-    "id": 65,
+    "_id": 65,
     "name": "Prometheus",
     "alias": "Prometheus",
     "city": "Ninguna",
     "team": "Ninguno"
   },
   {
-    "id": 66,
+    "_id": 66,
     "name": "Talia al Ghul",
     "alias": "Talia al Ghul",
     "city": "Ninguna",
     "team": "Liga de Asesinos"
   },
   {
-    "id": 67,
+    "_id": 67,
     "name": "Sinestro",
     "alias": "Sinestro",
     "city": "Korugar",
     "team": "Cuerpo de Sinestro"
   },
   {
-    "id": 68,
+    "_id": 68,
     "name": "Parallax",
     "alias": "Parallax",
     "city": "Ninguna",
     "team": "Ninguno"
   },
   {
-    "id": 69,
+    "_id": 69,
     "name": "General Zod",
     "alias": "General Zod",
     "city": "Krypton (anteriormente)",
     "team": "Ninguno"
   },
   {
-    "id": 70,
+    "_id": 70,
     "name": "Doomsday",
-    "alias": "Doomsday",
+    "alias": "Doomsday-12",
     "city": "Krypton (anteriormente)",
     "team": "Ninguno"
   }

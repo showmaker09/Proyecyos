@@ -17,34 +17,30 @@ async function getHeroes()
     }
 }
 
-
-async function getHeroById(id) // !!ATENCION!! este método es para obtener un héroe por su ID de MongoDB
-{
-    try 
-    {
-        // COMENTARIO: Es buena práctica validar si el ID es un ObjectId válido de MongoDB
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            throw new Error('ID de héroe inválido.');
-        }
-        // Mongoose.findById(id) busca un documento por su ID primario (_id).
-        const hero = await Hero.findById(id);
-        if (!hero) 
-        {
+// repositories/heroRepository.js
+// ...
+async function getHeroById(id) {
+    try {
+        // COMENTARIO: Mongoose.Types.ObjectId.isValid(id) verifica si el ID es un ObjectId (el tipo por defecto).
+        // Si ahora tus IDs son números, esta validación debe cambiar o eliminarse si sabes que siempre serán números.
+        // if (!mongoose.Types.ObjectId.isValid(id)) { // Esto ya no es necesario si tus _id son números
+        //     throw new Error('ID de héroe inválido (no es un ObjectId).');
+        // }
+        // El findById buscará por el _id, que ahora es tu número
+        const hero = await Hero.findById(id); // Esto buscará un documento cuyo _id sea el 'id' numérico
+        if (!hero) {
             throw new Error('Héroe no encontrado');
         }
         return hero;
-    } 
-    catch (error) 
-    {
-        // Si el error ya es un 'Héroe no encontrado', lo relanzamos para el controlador.
-        if (error.message === 'Héroe no encontrado' || error.message === 'ID de héroe inválido.') {
+    } catch (error) {
+        if (error.message === 'Héroe no encontrado') {
             throw error;
         }
         console.error("Error al obtener héroe por ID de MongoDB:", error);
         throw new Error('Error al obtener el héroe.');
     }
-} // Fin de getHeroById
-
+}
+// ...
 
 
 
