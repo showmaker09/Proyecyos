@@ -1,7 +1,8 @@
 import express from "express";
-import { check, validationResult } from 'express-validator';
+import { check,body, validationResult } from 'express-validator';
 import heroService from "../services/heroServices.js";
 import Hero from "../models/heroModel.js";
+//import{body,validationResult} from 'express-validator';// revisar si esto es necesario
 
 const router = express.Router();
 
@@ -11,6 +12,15 @@ router.get("/heroes", async (req, res) => {
         res.json(heroes);
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }
+});
+
+router.get("/heroes/:id", async (req, res) => {
+    try {
+        const heroes = await heroService.getHeroById(req.params.id);
+        res.json(heroes);
+    } catch (error) {
+        res.status(404).json({ error: error.message });
     }
 });
 
@@ -64,12 +74,65 @@ router.get('/heroes/city/:city', async (req, res) => {
 
 router.post('/heroes/:id/enfrentar', async (req, res) => {
   try {
-    const result = await heroService.faceVillain(req.params.id, req.body.villain);
-    res.json({ message: result });
+    // CAMBIO CLAVE AQUÍ: Extraer villainId del cuerpo de la solicitud
+    const heroId = req.params.id;
+    const villainId = req.body.villainId; // <--- Extraer villainId del cuerpo
+
+    // Llama al servicio con el heroId y el villainId
+    const result = await heroService.faceVillain(heroId, villainId);
+
+    // Tu servicio ya devuelve el objeto 'battleResult', así que lo envías directamente
+    res.json(result);
   } catch (err) {
-    res.status(404).json({ error: err.message });
+    // Manejo mejorado de errores para respuestas HTTP más claras.
+    if (err.message.includes('Héroe no encontrado') || err.message.includes('Villano no encontrado')) {
+      return res.status(404).json({ error: err.message });
+    }
+    res.status(500).json({ error: err.message });
   }
 });
+
+
+// nuevo router verificar si esto falla::
+router.post(
+  '/heroes/team-battle',
+  [
+    body('heroIds')
+      .isArray({ min: 3, max: 3 })
+      .withMessage('Debe proporcionar exactamente 3 IDs para héroes.')
+      .bail()
+      .custom(value => value.every(id => typeof id === 'number' && id > 0))
+      .withMessage('Los IDs de héroes deben ser números enteros positivos.'),
+    body('villainIds')
+      .isArray({ min: 3, max: 3 })
+      .withMessage('Debe proporcionar exactamente 3 IDs para villanos.')
+      .bail()
+      .custom(value => value.every(id => typeof id === 'number' && id > 0))
+      .withMessage('Los IDs de villanos deben ser números enteros positivos.'),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const { heroIds, villainIds } = req.body;
+      const battleResult = await heroService.teamBattle(heroIds, villainIds);
+      res.json(battleResult);
+    } catch (err) {
+      // Manejo de errores más específico
+      if (err.message.includes('No se encontraron todos los')) {
+        return res.status(404).json({ error: err.message });
+      }
+      if (err.message.includes('debe proporcionar exactamente')) {
+        return res.status(400).json({ error: err.message });
+      }
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
 
 
 

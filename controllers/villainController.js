@@ -13,7 +13,14 @@ router.get("/villains", async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
-
+router.get("/villains/:id", async (req, res) => {
+    try {
+        const villain = await villainService.getVillainById(req.params.id);
+        res.json(villain);
+    } catch (error) {
+        res.status(404).json({ error: error.message });
+    }
+});
 router.post("/villains",
     [
         check('name').not().isEmpty().withMessage('El nombre es requerido'),

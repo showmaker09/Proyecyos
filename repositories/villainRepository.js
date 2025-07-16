@@ -15,6 +15,20 @@ async function getVillains() {
 
 }
 
+ async function getVillainById(id) {
+    try {
+        const villains = await getVillains();
+        const villain = villains.find(v => v.id === parseInt(id));
+        if (!villain) {
+            throw new Error('Villano no encontrado');
+        }
+        return villain;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error al obtener el villano');
+    }
+}
+
 async function saveVillains(villains) {
     try {
         await fs.writeJson(filePath, villains)
@@ -25,7 +39,8 @@ async function saveVillains(villains) {
 
 export default {
     getVillains,
-    saveVillains
+    saveVillains,
+    getVillainById
 }
 
       

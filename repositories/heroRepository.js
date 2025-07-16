@@ -14,6 +14,19 @@ async function getHeroes() {
     }
 
 }
+async function getHeroById(id) {
+    try {
+        const heroes = await getHeroes();
+        const hero = heroes.find(h => h.id === parseInt(id));
+        if (!hero) {
+            throw new Error('Héroe no encontrado');
+        }
+        return hero;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error al obtener el héroe');
+    }
+}
 
 async function saveHeroes(heroes) {
     try {
@@ -25,5 +38,6 @@ async function saveHeroes(heroes) {
 
 export default {
     getHeroes,
+    getHeroById,
     saveHeroes
 }

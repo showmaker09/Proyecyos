@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: API de Superhéroes y Villanos # <--- Título actualizado
+  title: API de Superhéroes y Villanos
   version: 1.0.0
   description: Una API simple para gestionar superhéroes, villanos y sus aventuras.
 
@@ -10,7 +10,7 @@ servers:
 tags:
   - name: Héroes
     description: Operaciones relacionadas con los superhéroes
-  - name: Villanos # <--- Nueva etiqueta para Villanos
+  - name: Villanos
     description: Operaciones relacionadas con los villanos
 
 paths:
@@ -27,7 +27,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Hero' # Referencia a la definición de Héroe
+                  $ref: '#/components/schemas/Hero'
         '500':
           description: Error interno del servidor
     post:
@@ -39,7 +39,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/HeroInput' # Para la creación, sin ID
+              $ref: '#/components/schemas/HeroInput'
       responses:
         '201':
           description: Héroe agregado exitosamente
@@ -52,7 +52,29 @@ paths:
         '500':
           description: Error interno del servidor
 
-  /heroes/{id}:
+  /heroes/{id}: # <--- Bloque unificado para GET, PUT, DELETE
+    get:
+      summary: Obtiene un héroe por ID
+      tags:
+        - Héroes
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID del héroe a obtener
+      responses:
+        '200':
+          description: Héroe encontrado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hero'
+        '404':
+          description: Héroe no encontrado
+        '500':
+          description: Error interno del servidor
     put:
       summary: Actualiza un héroe existente
       tags:
@@ -61,7 +83,7 @@ paths:
         - in: path
           name: id
           schema:
-            type: integer # <--- Cambiado de string a integer para consistencia con parseInt
+            type: integer
           required: true
           description: ID del héroe a actualizar
       requestBody:
@@ -69,7 +91,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/HeroInput' # Puedes reutilizar o hacer uno específico para update
+              $ref: '#/components/schemas/HeroInput'
       responses:
         '200':
           description: Héroe actualizado exitosamente
@@ -89,7 +111,7 @@ paths:
         - in: path
           name: id
           schema:
-            type: integer # <--- Cambiado de string a integer para consistencia con parseInt
+            type: integer
           required: true
           description: ID del héroe a eliminar
       responses:
@@ -141,7 +163,7 @@ paths:
         - in: path
           name: id
           schema:
-            type: integer # <--- Cambiado de string a integer para consistencia con parseInt
+            type: integer
           required: true
           description: ID del héroe que enfrentará
       requestBody:
@@ -151,18 +173,18 @@ paths:
             schema:
               type: object
               properties:
-                villain:
-                  type: string
-                  description: Nombre o alias del villano a enfrentar
-                  example: Joker
+                villainId:
+                  type: integer
+                  description: ID del villano al que se enfrentará el héroe
+                  example: 1
               required:
-                - villain # <--- Añadido 'required' para el campo villain
+                - villainId
       responses:
         '200':
           description: Enfrentamiento registrado exitosamente
           content:
             application/json:
-              schema: # <--- Esquema actualizado para reflejar el objeto battleResult
+              schema:
                 type: object
                 properties:
                   hero:
@@ -171,15 +193,20 @@ paths:
                       id: { type: integer }
                       alias: { type: string }
                       name: { type: string }
+                      power: { type: integer }
                   villain:
                     type: object
                     properties:
                       id: { type: integer }
                       alias: { type: string }
                       name: { type: string }
-                  
+                      power: { type: integer }
+                  outcome: { type: string, example: 'Batman (Bruce Wayne) derrota a Joker (Clown Prince of Crime)! ¡La justicia prevalece!' }
+                  winner: { type: string, example: 'Batman' }
+                  timestamp: { type: string, format: 'date-time' }
+        '404':
           description: Héroe o villano no encontrado
-          content: # <--- Añadido content para 404
+          content:
             application/json:
               schema:
                 type: object
@@ -190,8 +217,121 @@ paths:
         '500':
           description: Error interno del servidor
 
-  # --- RUTAS DE VILLANOS ---
-  /villains: # <--- Nuevas rutas para villanos
+  /heroes/team-battle: # <--- Ruta para batallas de equipo aqui esta
+    post:
+      summary: Simula una batalla entre un equipo de 3 héroes y 3 villanos.
+      tags:
+        - Héroes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                heroIds:
+                  type: array
+                  items:
+                    type: integer
+                  minItems: 3
+                  maxItems: 3
+                  description: Array de 3 IDs de héroes para el equipo.
+                  example: [1, 2, 3]
+                villainIds:
+                  type: array
+                  items:  
+                    type: integer
+                  minItems: 3
+                  maxItems: 3
+                  description: Array de 3 IDs de villanos para el equipo.
+                  example: [1, 2, 3]
+                   # INICIO DE CAMBIO: NUEVO CAMPO damageType aqui se agrega un cambio revisarlo
+                damageType: # <-- Nuevo campo para el tipo de daño
+                  type: string
+                  description: Tipo de daño a aplicar en cada ataque.
+                  enum: [basic, power, critical] # Valores permitidos
+                  example: basic
+                  
+              required:
+                - heroIds
+                - villainIds
+                - damageType # <-- este tambien es un cambio que realize
+      responses:
+        '200':
+          description: Resultado de la batalla de equipo.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "El equipo de Héroes ha ganado la batalla!"
+                  battleDetails:
+                    type: object
+                    properties:
+                      heroes:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id: { type: integer }
+                            alias: { type: string }
+                            name: { type: string }
+                            power: { type: integer }
+                            initialHealth: { type: integer }
+                            remainingHealth: { type: integer }
+                            criticalDamageChance: { type: string }
+                      villains:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id: { type: integer }
+                            alias: { type: string }
+                            name: { type: string }
+                            power: { type: integer }
+                            initialHealth: { type: integer }
+                            remainingHealth: { type: integer }
+                            criticalDamageChance: { type: string }
+                      winner:
+                        type: string
+                        example: "Equipo de Héroes"
+                      loser:
+                        type: string
+                        example: "Equipo de Villanos"
+                      roundsFought:
+                        type: integer
+                        example: 5
+                      log:
+                        type: array
+                        items:
+                          type: string
+                          example: "Ronda 1: Superman ataca a Joker por 15 de daño. Joker tiene 85 de vida restante."
+        '400':
+          description: Solicitud inválida (ej. número incorrecto de participantes).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Debe proporcionar exactamente 3 IDs para héroes y 3 para villanos."
+        '404':
+          description: Héroes o villanos no encontrados.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No se encontraron algunos héroes/villanos con los IDs proporcionados."
+        '500':
+          description: Error interno del servidor.
+
+  /villains:
     get:
       summary: Obtiene todos los villanos
       tags:
@@ -229,7 +369,7 @@ paths:
         '500':
           description: Error interno del servidor
 
-  /villains/{id}: # <--- Rutas para operaciones con ID de villano
+  /villains/{id}:
     get:
       summary: Obtiene un villano por ID
       tags:
@@ -268,7 +408,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VillainInput' # Reutiliza el input para PUT
+              $ref: '#/components/schemas/VillainInput'
       responses:
         '200':
           description: Villano actualizado exitosamente
@@ -307,7 +447,7 @@ paths:
         '500':
           description: Error interno del servidor
 
-  /villains/city/{city}: # <--- Ruta para buscar villanos por ciudad
+  /villains/city/{city}:
     get:
       summary: Busca villanos por ciudad
       tags:
@@ -338,7 +478,7 @@ components:
       type: object
       properties:
         id:
-          type: integer # <--- Cambiado de string a integer
+          type: integer
           readOnly: true
         name:
           type: string
@@ -358,7 +498,7 @@ components:
       required:
         - name
         - alias
-    HeroInput: # Schema para la entrada (POST/PUT), donde no se envía el ID
+    HeroInput:
       type: object
       properties:
         name:
@@ -379,8 +519,7 @@ components:
       required:
         - name
         - alias
-    # --- ESQUEMAS DE VILLANOS ---
-    Villain: # <--- Nuevo esquema para el modelo Villain
+    Villain:
       type: object
       properties:
         id:
@@ -403,7 +542,7 @@ components:
       required:
         - name
         - alias
-    VillainInput: # <--- Nuevo esquema para la entrada de datos de Villain (POST/PUT)
+    VillainInput:
       type: object
       properties:
         name:

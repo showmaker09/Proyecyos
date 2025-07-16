@@ -4,6 +4,14 @@ async function getAllVillains() {
     return await VillainRepository.getVillains()
 }
 
+async function getVillainById(id) {
+    const villain = await VillainRepository.getVillainById(id);
+    if (!villain) {
+        throw new Error('Villano no encontrado');
+    }
+    return villain;
+}
+
 async function addVillain(villain) {
     if (!villain.name || !villain.alias) {
         throw new Error("El villano debe tener un nombre y un alias.");
@@ -54,21 +62,15 @@ async function findVillainsByCity(city) {
   return villains.filter(villain => villain.city.toLowerCase() === city.toLowerCase());
 }
 
-async function getVillainByName(name) {
-    const villains = await VillainRepository.getVillains();
-    // Busca por alias o nombre real, ignorando mayúsculas/minúsculas
-    return villains.find(villain =>
-        (villain.alias && villain.alias.toLowerCase() === name.toLowerCase()) ||
-        (villain.name && villain.name.toLowerCase() === name.toLowerCase())
-    );
-}
+
 
 
 export default {
+
     getAllVillains,
     addVillain,
     updateVillain,
     deleteVillain,
     findVillainsByCity,
-    getVillainByName
+    getVillainById
 }
