@@ -3,8 +3,16 @@ import heroController from './controllers/heroController.js';
 import villainController from './controllers/villainController.js';
 import swaggerUi from 'swagger-ui-express'; // Importa swagger-ui-express
 import YAML from 'yamljs'; // Importa yamljs
+import dotenv from 'dotenv';
+import connectDB from './config/db.js'; // Importa la función de conexión a la base de datos
 
-const app = express();
+dotenv.config();
+
+const app = express(); // Crea una instancia de Express que es la aplicación principal
+// Conectar a la base de datos
+connectDB(); // Llama a la función para conectar a la base de datos MongoDB
+
+
 
 // Carga tu archivo swagger.yaml
 const swaggerDocument = YAML.load('./docs/swagger.yaml'); // Asegúrate que la ruta sea correcta
