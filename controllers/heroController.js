@@ -109,16 +109,24 @@ router.post(
       .bail()
       .custom(value => value.every(id => typeof id === 'number' && id > 0))
       .withMessage('Los IDs de villanos deben ser números enteros positivos.'),
+   
+   
+      // INICIO DE CAMBIO: Validación del nuevo campo damageType verificar si esto falla
+      body('damageType')
+            .not().isEmpty().withMessage('El tipo de daño es requerido.')
+            .bail()
+            .isIn(['basic', 'power', 'critical']).withMessage('Tipo de daño inválido. Los valores permitidos son: basic, power, critical.'),
+        // FIN DE CAMBIO
   ],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-
+     // se hicieron algunos cambios en el servicio heroService.teamBattle para incluir el nuevo campo damageType
     try {
-      const { heroIds, villainIds } = req.body;
-      const battleResult = await heroService.teamBattle(heroIds, villainIds);
+      const { heroIds, villainIds, damageType } = req.body; // se agrega el nuevo campo damageType
+      const battleResult = await heroService.teamBattle(heroIds, villainIds, damageType); // se pasa el nuevo campo damageType al servicio
       res.json(battleResult);
     } catch (err) {
       // Manejo de errores más específico
