@@ -3,6 +3,8 @@ import villainService from './villainService.js'
 import Hero from '../models/heroModel.js'
 import villainRepository from '../repositories/villainRepository.js' // Asegúrate de importar el repositorio de villanos
 //import heroRepository from '../repositories/heroRepository.js'//veriicar si esto es el problema
+import{v4 as uuidv4} from 'uuid'; // Importa uuid para generar IDs únicos si es necesario
+
 
 async function getAllHeroes() {
     return await heroRepository.getHeroes()
@@ -187,6 +189,9 @@ function calculateDamage(attackerPower,damageType) // si se agrega el nuevo camp
 
 // INICIO DE MODIFICACIÓN: Función teamBattle para Batalla Interactiva 3v3
 // Ahora acepta el lado del jugador, sus IDs, su tipo de ataque y los IDs del oponente.
+
+// INICIO DE MODIFICACIÓN: Función teamBattle para Batalla Interactiva 3v3
+// Ahora acepta el lado del jugador, sus IDs, su tipo de ataque y los IDs del oponente.
 async function teamBattle(playerSide, playerTeamIds, playerAttackType, opponentTeamIds) {
     console.log(`[Service] Iniciando teamBattle Interactiva: Jugador como ${playerSide} con IDs ${playerTeamIds} (${playerAttackType}) vs IDs ${opponentTeamIds}`);
 
@@ -216,7 +221,7 @@ async function teamBattle(playerSide, playerTeamIds, playerAttackType, opponentT
     } else { // playerSide === 'villain'
         villainIds = playerTeamIds;
         heroIds = opponentTeamIds;
-        villainEffectiveAttackType = playerAttackType;
+        villlainEffectiveAttackType = playerAttackType;
         heroEffectiveAttackType = 'basic'; // El equipo rival (héroes) usa ataque básico por defecto
     }
     // --- FIN DE CAMBIO CLAVE: Determinación de Equipos y Tipos de Ataque Efectivos ---
@@ -310,7 +315,8 @@ async function teamBattle(playerSide, playerTeamIds, playerAttackType, opponentT
             }
 
             // Verificar si los héroes ganaron después de su ataque
-            if (villainsInBattle.every(v => v.remainingHealth <= 0)) {
+            if (villainsInBattle.every(v => v.remainingHealth <= 0)) 
+            {
                 winner = "Equipo de Héroes";
                 break; // Héroes ganaron, terminar la batalla
             }
@@ -360,8 +366,8 @@ async function teamBattle(playerSide, playerTeamIds, playerAttackType, opponentT
 
         // --- INICIO DE CAMBIO: Formato de la Respuesta ---
         const finalMessage = winner.includes("Héroes") ? "¡El equipo de Héroes ha ganado la batalla!" :
-                             winner.includes("Villanos") ? "¡El equipo de Villanos ha prevalecido!" :
-                             "La batalla ha terminado en empate.";
+                                 winner.includes("Villanos") ? "¡El equipo de Villanos ha prevalecido!" :
+                                 "La batalla ha terminado en empate.";
 
         return {
             message: finalMessage,
@@ -405,6 +411,212 @@ async function teamBattle(playerSide, playerTeamIds, playerAttackType, opponentT
     }
 }
 // FIN DE MODIFICACIÓN: Función teamBattle para Batalla Interactiva 3v3
+
+
+// --- NUEVAS FUNCIONES PARA LA BATALLA INTERACTIVA (POR TURNOS) ---
+
+// Almacenamiento de sesiones de batalla interactivas
+const battleSessions = new Map(); // battleId -> BattleStateObject
+
+// Función auxiliar para elegir un objetivo aleatorio de un equipo vivo (si no se especifica)
+function getRandomTarget(team) {
+    const livingMembers = team.filter(m => !m.isDefeated);
+    if (livingMembers.length === 0) return null;
+    return livingMembers[Math.floor(Math.random() * livingMembers.length)];
+}
+
+// Función auxiliar para obtener el tipo de ataque de la IA (aleatorio)
+function getRandomAttackType() {
+    const attackTypes = ['basic', 'power', 'critical'];
+    return attackTypes[Math.floor(Math.random() * attackTypes.length)];
+}
+
+async function startInteractiveBattle(playerSide, playerTeamIds, opponentTeamIds) {
+    console.log(`[Service] Iniciando batalla interactiva: Jugador como ${playerSide}, Equipo Jugador IDs: ${playerTeamIds}, Equipo Oponente IDs: ${opponentTeamIds}`);
+
+    if (new Set(playerTeamIds).size !== playerTeamIds.length) { throw new Error('IDs duplicados encontrados en el equipo del jugador.'); }
+    if (new Set(opponentTeamIds).size !== opponentTeamIds.length) { throw new Error('IDs duplicados encontrados en el equipo oponente.'); }
+    if (playerTeamIds.length !== 3 || opponentTeamIds.length !== 3) {
+        throw new Error('Para la batalla interactiva, ambos equipos deben tener exactamente 3 miembros.');
+    }
+
+    let fetchedPlayerPromises = [];
+    let fetchedOpponentPromises = [];
+
+    // Prepara las promesas para obtener los personajes usando tus repositorios
+    if (playerSide === 'hero') {
+        fetchedPlayerPromises = playerTeamIds.map(id => heroRepository.getHeroById(id));
+        fetchedOpponentPromises = opponentTeamIds.map(id => villainRepository.getVillainById(id)); // Usamos villainRepository
+    } else { // playerSide === 'villain'
+        fetchedPlayerPromises = playerTeamIds.map(id => villainRepository.getVillainById(id));
+        fetchedOpponentPromises = opponentTeamIds.map(id => heroRepository.getHeroById(id));
+    }
+
+    const [fetchedPlayers, fetchedOpponents] = await Promise.all([
+        Promise.all(fetchedPlayerPromises),
+        Promise.all(fetchedOpponentPromises)
+    ]);
+
+    const buildTeam = (fetchedMembers, side, originalIds) => {
+        return fetchedMembers.map((member, index) => {
+            if (!member) {
+                throw new Error(`${side === 'player' ? 'Personaje del equipo del jugador' : 'Personaje del equipo oponente'} con ID ${originalIds[index]} no encontrado.`);
+            }
+            // Para MongoDB, _id es el identificador primario. Lo convertimos a string.
+            const charType = member.powers ? 'villain' : 'hero'; // Heurística simple para determinar el tipo
+            const defaultPower = charType === 'hero' ? 50 : 45;
+
+            return {
+                id: member._id.toString(), // CONVERTIMOS ObjectId A STRING
+                alias: member.alias,
+                name: member.name,
+                type: charType,
+                power: member.power || defaultPower,
+                initialHealth: member.health || BASE_HEALTH,
+                currentHealth: member.health || BASE_HEALTH,
+                isDefeated: false,
+            };
+        });
+    };
+
+    const playerCharacters = buildTeam(fetchedPlayers, 'player', playerTeamIds);
+    const opponentCharacters = buildTeam(fetchedOpponents, 'opponent', opponentTeamIds);
+
+    const battleId = uuidv4();
+    const initialBattleState = {
+        battleId: battleId,
+        roundNumber: 0,
+        playerSide: playerSide,
+        playerTeam: playerCharacters,
+        opponentTeam: opponentCharacters,
+        currentLog: [],
+        overallLog: [],
+        status: 'ongoing',
+        winner: null,
+    };
+
+    battleSessions.set(battleId, initialBattleState);
+    console.log(`[Service] Batalla ${battleId} iniciada. Estado inicial.`);
+
+    return {
+        battleId: battleId,
+        initialState: initialBattleState
+    };
+}
+
+async function processBattleRound(battleId, playerActions) {
+    console.log(`[Service] Procesando turno para batalla ${battleId}. Acciones del jugador:`, playerActions);
+
+    let battleState = battleSessions.get(battleId);
+
+    if (!battleState) { throw new Error('Batalla no encontrada con el ID proporcionado.'); }
+    if (battleState.status !== 'ongoing') { throw new Error(`La batalla ya ha terminado con el estado: ${battleState.status}.`); }
+
+    battleState.roundNumber++;
+    battleState.currentLog = [`--- RONDA ${battleState.roundNumber} ---`];
+
+    const playerTeam = battleState.playerTeam;
+    const opponentTeam = battleState.opponentTeam;
+
+    // 2. Procesar acciones del jugador
+    for (const action of playerActions) {
+        // Convertir characterId a string para comparar con los IDs de MongoDB almacenados
+        const playerChar = playerTeam.find(c => c.id === action.characterId.toString());
+        if (!playerChar) {
+            battleState.currentLog.push(`ADVERTENCIA: Personaje con ID ${action.characterId} no es parte de tu equipo en esta batalla o no existe.`);
+            continue; // Saltar esta acción y seguir con la siguiente
+        }
+        if (playerChar.isDefeated) {
+            battleState.currentLog.push(`${playerChar.alias} está derrotado y no puede atacar.`);
+            continue;
+        }
+
+        if (!['basic', 'power', 'critical'].includes(action.attackType)) {
+             battleState.currentLog.push(`ADVERTENCIA: Tipo de ataque '${action.attackType}' para ${playerChar.alias} es inválido. Se usará 'basic'.`);
+             action.attackType = 'basic'; // Usar basic como fallback
+        }
+
+        let targetOpponent = null;
+        if (action.targetId) {
+            // Convertir targetId a string para comparar
+            targetOpponent = opponentTeam.find(c => c.id === action.targetId.toString());
+            if (!targetOpponent || targetOpponent.isDefeated) {
+                targetOpponent = getRandomTarget(opponentTeam);
+                if(targetOpponent) battleState.currentLog.push(`${playerChar.alias} intentó atacar un objetivo inválido o derrotado. Atacando a ${targetOpponent.alias} en su lugar.`);
+            }
+        } else {
+            targetOpponent = getRandomTarget(opponentTeam);
+        }
+
+        if (targetOpponent) {
+            const damageDealt = calculateDamage(playerChar.power, action.attackType);
+            targetOpponent.currentHealth = Math.max(0, targetOpponent.currentHealth - damageDealt);
+            targetOpponent.isDefeated = targetOpponent.currentHealth <= 0;
+
+            const attackDescription = action.attackType === 'basic' ? '(Ataque Básico)' :
+                                      action.attackType === 'power' ? '(Ataque de Poder)' :
+                                      '(¡Ataque CRÍTICO!)';
+            
+            battleState.currentLog.push(`${playerChar.alias} (${playerChar.type}) ataca a ${targetOpponent.alias} (${targetOpponent.type}) por ${damageDealt.toFixed(2)} de daño ${attackDescription}.`);
+            battleState.currentLog.push(`${targetOpponent.alias} tiene ${targetOpponent.currentHealth.toFixed(2)} de salud restante.${targetOpponent.isDefeated ? ' ¡Ha sido derrotado!' : ''}`);
+        } else {
+            battleState.currentLog.push(`${playerChar.alias} no encontró objetivos válidos para atacar.`);
+        }
+    }
+
+    // 3. Procesar acciones del oponente (IA simple)
+    const livingOpponents = opponentTeam.filter(c => !c.isDefeated);
+    const livingPlayers = playerTeam.filter(c => !c.isDefeated);
+
+    if (livingOpponents.length > 0 && livingPlayers.length > 0) {
+        for (const opponentChar of livingOpponents) {
+            if (opponentChar.isDefeated) continue; // Si el oponente está KO, no ataca
+
+            const targetPlayer = getRandomTarget(playerTeam);
+            if (targetPlayer) {
+                const aiAttackType = getRandomAttackType();
+                const damageDealt = calculateDamage(opponentChar.power, aiAttackType);
+                targetPlayer.currentHealth = Math.max(0, targetPlayer.currentHealth - damageDealt);
+                targetPlayer.isDefeated = targetPlayer.currentHealth <= 0;
+
+                const attackDescription = aiAttackType === 'basic' ? '(Ataque Básico)' :
+                                          aiAttackType === 'power' ? '(Ataque de Poder)' :
+                                          '(¡Ataque CRÍTICO!)';
+
+                battleState.currentLog.push(`${opponentChar.alias} (${opponentChar.type}) ataca a ${targetPlayer.alias} (${targetPlayer.type}) por ${damageDealt.toFixed(2)} de daño ${attackDescription}.`);
+                battleState.currentLog.push(`${targetPlayer.alias} tiene ${targetPlayer.currentHealth.toFixed(2)} de salud restante.${targetPlayer.isDefeated ? ' ¡Ha sido derrotado!' : ''}`);
+            } else {
+                battleState.currentLog.push(`${opponentChar.alias} no encontró objetivos válidos para atacar.`);
+            }
+        }
+    }
+
+    // 4. Actualizar estado general de la batalla
+    battleState.overallLog = battleState.overallLog.concat(battleState.currentLog);
+
+    const allPlayersDefeated = playerTeam.every(c => c.isDefeated);
+    const allOpponentsDefeated = opponentTeam.every(c => c.isDefeated);
+
+    if (allPlayersDefeated && allOpponentsDefeated) {
+        battleState.status = 'draw';
+        battleState.winner = 'draw';
+        battleState.overallLog.push('La batalla ha terminado en empate!');
+    } else if (allOpponentsDefeated) {
+        battleState.status = 'player_won';
+        battleState.winner = battleState.playerSide;
+        battleState.overallLog.push(`¡El equipo de ${battleState.playerSide === 'hero' ? 'Héroes' : 'Villanos'} ha ganado la batalla!`);
+    } else if (allPlayersDefeated) {
+        battleState.status = 'opponent_won';
+        battleState.winner = battleState.playerSide === 'hero' ? 'villain' : 'hero';
+        battleState.overallLog.push(`¡El equipo de ${battleState.playerSide === 'hero' ? 'Villanos' : 'Héroes'} ha ganado la batalla!`);
+    }
+
+    battleSessions.set(battleId, battleState);
+    console.log(`[Service] Turno ${battleState.roundNumber} procesado para batalla ${battleId}. Estado actualizado.`);
+
+    return battleState;
+}
+// FIN DE MODIFICACIÓN: Función teamBattle para Batalla Interactiva 3v3
 // ... (asegúrate de que todas tus funciones como getAllHeroes, addHero, etc., estén definidas o importadas antes del export default)
 // Si estas funciones ya están definidas en este archivo, este `export default` está bien.
 export default {
@@ -416,5 +628,7 @@ export default {
      findHeroesByCity,
      faceVillain,
      getHeroById,
-     calculateDamage // Si calculateDamage no se exporta globalmente, puedes exportarlo aquí
+     calculateDamage,  // Si calculateDamage no se exporta globalmente, puedes exportarlo aquí
+    startInteractiveBattle,
+    processBattleRound,
 };

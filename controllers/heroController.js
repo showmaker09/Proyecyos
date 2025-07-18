@@ -1,11 +1,9 @@
 import express from "express";
-import { check,body, validationResult } from 'express-validator';
+import { param,check,body, validationResult } from 'express-validator'; // Importa param y body de express-validator !!IMPORTANTE NO OLVIDARLO
 import heroService from "../services/heroServices.js";
 import Hero from "../models/heroModel.js";
-import { Router } from 'express';
 
 
-//import{body,validationResult} from 'express-validator';// revisar si esto es necesario
 
 const router = express.Router();
 
@@ -97,38 +95,20 @@ router.post('/heroes/:id/enfrentar', async (req, res) => {
 
 
   
-/**
- * @route POST /api/heroes/team-battle-interactive
- * @description Permite al usuario iniciar una batalla 3v3 interactiva eligiendo su bando y tipo de ataque.
- * @access Public
- * @body {string} playerSide - El bando del jugador ('hero' o 'villain').
- * @body {number[]} playerTeamIds - Array de 3 IDs de los personajes del equipo del jugador.
- * @body {string} playerAttackType - Tipo de ataque para el equipo del jugador ('basic', 'power', 'critical').
- * @body {number[]} opponentTeamIds - Array de 3 IDs de los personajes del equipo oponente.
- */
-router.post(
-  '/heroes/:team-battle-interactive',
+ router.post(
+  '/heroes/interactive-battle/start', // CAMBIO DE RUTA
   [
-    // Validación para 'playerSide'
     body('playerSide')
       .not().isEmpty().withMessage('El lado del jugador es requerido.')
-      .bail() // Si falla, no continuar con validaciones encadenadas
+      .bail()
       .isIn(['hero', 'villain']).withMessage('El lado del jugador debe ser "hero" o "villain".'),
 
-    // Validación para 'playerTeamIds'
     body('playerTeamIds')
       .isArray({ min: 3, max: 3 }).withMessage('Debe proporcionar exactamente 3 IDs para el equipo del jugador.')
       .bail()
       .custom(value => value.every(id => typeof id === 'number' && Number.isInteger(id) && id > 0))
       .withMessage('Los IDs del equipo del jugador deben ser números enteros positivos.'),
 
-    // Validación para 'playerAttackType'
-    body('playerAttackType')
-      .not().isEmpty().withMessage('El tipo de ataque es requerido.')
-      .bail()
-      .isIn(['basic', 'power', 'critical']).withMessage('Tipo de ataque inválido. Los valores permitidos son: basic, power, critical.'),
-    
-    // Validación para 'opponentTeamIds'
     body('opponentTeamIds')
       .isArray({ min: 3, max: 3 }).withMessage('Debe proporcionar exactamente 3 IDs para el equipo oponente.')
       .bail()
@@ -136,35 +116,85 @@ router.post(
       .withMessage('Los IDs del equipo oponente deben ser números enteros positivos.'),
   ],
   async (req, res) => {
-    // Captura los errores de validación de las reglas definidas arriba
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
     try {
-      // Extrae los datos validados del cuerpo de la solicitud
-      const { playerSide, playerTeamIds, playerAttackType, opponentTeamIds } = req.body;
+      const { playerSide, playerTeamIds, opponentTeamIds } = req.body;
       
-      // Llama a la función de servicio teamBattle (que modificaremos a continuación)
-      // con los nuevos parámetros de la batalla interactiva
-      const battleResult = await heroService.teamBattle(playerSide, playerTeamIds, playerAttackType, opponentTeamIds);
+      // Llamamos a un nuevo método en heroService para iniciar la batalla
+      const battleStartInfo = await heroService.startInteractiveBattle(playerSide, playerTeamIds, opponentTeamIds);
       
-      // Envía la respuesta con el resultado de la batalla
-      res.json(battleResult);
+      res.json(battleStartInfo); // Devolvemos battleId y initialState
     } catch (err) {
-      console.error('Error en /team-battle-interactive:', err.message);
-      // Manejo de errores específico para IDs no encontrados o inválidos
-      if (err.message.includes('no encontrado') || err.message.includes('inválido')) {
+      console.error('Error al iniciar batalla interactiva:', err.message);
+      if (err.message.includes('no encontrado') || err.message.includes('inválido') || err.message.includes('duplicado')) {
         return res.status(404).json({ error: err.message });
       }
-      // Para cualquier otro error no manejado específicamente, devolver 500
-      res.status(500).json({ error: 'Error interno del servidor al procesar la batalla: ' + err.message });
+      res.status(500).json({ error: 'Error interno del servidor al iniciar la batalla: ' + err.message });
     }
   }
 );
-// FIN DE NUEVA IMPLEMENTACIÓN: Ruta POST par
+// FIN DE NUEVA IMPLEMENTACIÓN: Ruta POST para INICIAR la Batalla Interactiva por Turnos
+
+
+// INICIO DE NUEVA IMPLEMENTACIÓN: Ruta POST para PROCESAR UN TURNO en la Batalla Interactiva
+router.post(
+  '/heroes/interactive-battle/:battleId/turn', // RUTA PARA CADA TURNO
+  [
+    // Validación del battleId en los parámetros de la URL
+    param('battleId') //SE DEBE USAR UN IMPORT COMO 'param' de express-validator
+      .not().isEmpty().withMessage('El ID de la batalla es requerido.')
+      .bail()
+      .isUUID().withMessage('El ID de la batalla debe ser un UUID válido.'), // Asumiendo que battleId es un UUID
+
+    // Validación para el array de acciones del jugador
+    body()
+      .isArray({ min: 1, max: 3 }).withMessage('Debe proporcionar entre 1 y 3 acciones para el equipo del jugador.')
+      .bail()
+      .custom(actions => {
+        // Cada elemento del array debe ser un objeto PlayerAction
+        return actions.every(action => {
+          return typeof action === 'object' && action !== null &&
+                 typeof action.characterId === 'number' && Number.isInteger(action.characterId) && action.characterId > 0 &&
+                 typeof action.attackType === 'string' && ['basic', 'power', 'critical'].includes(action.attackType) &&
+                 (action.targetId === undefined || (typeof action.targetId === 'number' && Number.isInteger(action.targetId) && action.targetId > 0)); // targetId es opcional
+        });
+      }).withMessage('Cada acción debe especificar un characterId (entero positivo), un attackType válido (basic, power, critical) y opcionalmente un targetId (entero positivo).')
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const { battleId } = req.params; // Obtener battleId de los parámetros de la URL
+      const playerActions = req.body; // El cuerpo de la solicitud es el array de PlayerAction
+
+      // Llamamos a un nuevo método en heroService para procesar el turno
+      const updatedBattleState = await heroService.processBattleRound(battleId, playerActions);
+      
+      res.json(updatedBattleState); // Devolvemos el estado actualizado de la batalla
+    } catch (err) {
+      console.error('Error al procesar el turno de batalla:', err.message);
+      if (err.message.includes('Batalla no encontrada')) {
+        return res.status(404).json({ error: err.message });
+      }
+      if (err.message.includes('terminado')) { // Ej. "La batalla ya ha terminado."
+        return res.status(409).json({ error: err.message });
+      }
+      if (err.message.includes('inválido') || err.message.includes('no es parte de')) { // Ej. "Acción inválida"
+        return res.status(400).json({ error: err.message });
+      }
+      res.status(500).json({ error: 'Error interno del servidor al procesar el turno: ' + err.message });
+    }
+  }
+);
+// FIN DE NUEVA IMPLEMENTACIÓN: Ruta POST para PROCESAR UN TURNO en la Batalla Interactiva
 
 
 
-  export default router
+export default router;

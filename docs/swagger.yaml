@@ -5,16 +5,15 @@ info:
   description: Una API simple para gestionar superhéroes, villanos y sus aventuras.
 
 servers:
-  - url: http://localhost:3001/api # La URL base de tu API, recuerda tu app.use('/api', ...)
+  - url: http://localhost:3001/api # La URL base de tu API
 
 tags:
   - name: Héroes
     description: Operaciones relacionadas con los superhéroes
   - name: Villanos
     description: Operaciones relacionadas con los villanos
-  - name: Batallas # INICIO DE CAMBIO: Nuevo tag para organizar las batallas
-    description: Operaciones relacionadas con la simulación de batallas
-# FIN DE CAMBIO: Nuevo tag para organizar las batallas
+  - name: Batallas
+    description: Operaciones relacionadas con la simulación de batallas interactivas
 
 paths:
   /heroes:
@@ -55,7 +54,7 @@ paths:
         '500':
           description: Error interno del servidor
 
-  /heroes/{id}: # <--- Bloque unificado para GET, PUT, DELETE
+  /heroes/{id}:
     get:
       summary: Obtiene un héroe por ID
       tags:
@@ -65,7 +64,7 @@ paths:
           name: id
           schema:
             type: integer
-            format: int64 # INICIO DE CAMBIO: Usar int64 para IDs numéricos grandes si es necesario
+            format: int64
           required: true
           description: ID del héroe a obtener
       responses:
@@ -88,7 +87,7 @@ paths:
           name: id
           schema:
             type: integer
-            format: int64 # INICIO DE CAMBIO: Usar int64 para IDs numéricos grandes si es necesario
+            format: int64
           required: true
           description: ID del héroe a actualizar
       requestBody:
@@ -117,7 +116,7 @@ paths:
           name: id
           schema:
             type: integer
-            format: int64 # INICIO DE CAMBIO: Usar int64 para IDs numéricos grandes si es necesario
+            format: int64
           required: true
           description: ID del héroe a eliminar
       responses:
@@ -170,7 +169,7 @@ paths:
           name: id
           schema:
             type: integer
-            format: int64 # INICIO DE CAMBIO: Usar int64 para IDs numéricos grandes si es necesario
+            format: int64
           required: true
           description: ID del héroe que enfrentará
       requestBody:
@@ -182,9 +181,9 @@ paths:
               properties:
                 villainId:
                   type: integer
-                  format: int64 # INICIO DE CAMBIO: Usar int64 para IDs numéricos grandes si es necesario
+                  format: int64
                   description: ID del villano al que se enfrentará el héroe
-                  example: 101 # INICIO DE CAMBIO: Ejemplo para ID de villano
+                  example: 101
               required:
                 - villainId
       responses:
@@ -198,14 +197,14 @@ paths:
                   hero:
                     type: object
                     properties:
-                      id: { type: integer, format: int64 } # INICIO DE CAMBIO: Ajustar tipo de ID
+                      id: { type: integer, format: int64 }
                       alias: { type: string }
                       name: { type: string }
                       power: { type: integer }
                   villain:
                     type: object
                     properties:
-                      id: { type: integer, format: int64 } # INICIO DE CAMBIO: Ajustar tipo de ID
+                      id: { type: integer, format: int64 }
                       alias: { type: string }
                       name: { type: string }
                       power: { type: integer }
@@ -225,74 +224,33 @@ paths:
         '500':
           description: Error interno del servidor
 
-  # INICIO DE CAMBIO: Eliminación del antiguo endpoint /heroes/team-battle
-  # El endpoint POST /heroes/team-battle ha sido reemplazado por /heroes/team-battle-interactive
-  # Por lo tanto, se elimina su definición para evitar confusiones y reflejar la API actual.
-  # FIN DE CAMBIO: Eliminación del antiguo endpoint /heroes/team-battle
-
-  # INICIO DE NUEVA IMPLEMENTACIÓN: Endpoint para la Batalla Interactiva 3v3
-  /heroes/team-battle-interactive:
+  # INICIO DE NUEVOS ENDPOINTS PARA BATALLA INTERACTIVA POR TURNOS
+  /heroes/interactive-battle/start: # Renombrado y modificado
     post:
-      summary: Simula una batalla por equipos 3v3 interactiva con elección de bando y tipo de ataque.
-      operationId: simulateInteractiveTeamBattle
+      summary: Inicia una nueva batalla por equipos 3v3 interactiva.
+      operationId: startInteractiveTeamBattle
       tags:
-        - Batallas # Usamos el nuevo tag 'Batallas'
+        - Batallas
       requestBody:
-        description: Detalles para iniciar una batalla por equipos interactiva.
+        description: Parámetros iniciales para una batalla interactiva.
         required: true
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - playerSide
-                - playerTeamIds
-                - playerAttackType
-                - opponentTeamIds
-              properties:
-                playerSide:
-                  type: string
-                  description: El bando que el usuario desea controlar en la batalla.
-                  enum: [hero, villain]
-                  example: hero
-                playerTeamIds:
-                  type: array
-                  items:
-                    type: integer
-                    format: int64 # IDs numéricos
-                    minimum: 1
-                  minItems: 3
-                  maxItems: 3
-                  description: Array de 3 IDs de los personajes para el equipo del jugador.
-                  example: [1, 2, 3]
-                playerAttackType:
-                  type: string
-                  description: El tipo de ataque que usará el equipo del jugador.
-                  enum: [basic, power, critical]
-                  example: power
-                opponentTeamIds:
-                  type: array
-                  items:
-                    type: integer
-                    format: int64 # IDs numéricos
-                    minimum: 1
-                  minItems: 3
-                  maxItems: 3
-                  description: Array de 3 IDs de los personajes para el equipo oponente.
-                  example: [101, 102, 103]
+              $ref: '#/components/schemas/BattleStartRequest'
       responses:
         '200':
-          description: Resultado detallado de la batalla por equipos interactiva.
+          description: Batalla iniciada exitosamente. Devuelve el ID de la batalla y su estado inicial.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InteractiveBattleResult'
+                $ref: '#/components/schemas/BattleStartResponse'
         '400':
-          description: Solicitud inválida debido a datos faltantes o incorrectos.
+          description: Solicitud inválida debido a datos faltantes o incorrectos (ej. IDs duplicados, número incorrecto de personajes).
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse' # Usamos un schema genérico de error
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Uno o más personajes (Héroes/Villanos) no fueron encontrados.
           content:
@@ -305,7 +263,64 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  # FIN DE NUEVA IMPLEMENTACIÓN: Endpoint para la Batalla Interactiva 3v3
+
+  /heroes/interactive-battle/{battleId}/turn: # Nuevo endpoint para cada turno
+    post:
+      summary: Procesa un turno en una batalla interactiva existente.
+      operationId: processBattleTurn
+      tags:
+        - Batallas
+      parameters:
+        - in: path
+          name: battleId
+          schema:
+            type: string # UUID o similar
+            format: uuid # Si usas UUIDs
+          required: true
+          description: ID de la batalla interactiva activa.
+      requestBody:
+        description: Acciones del jugador para la ronda actual.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/PlayerAction' # Un array de acciones, una por personaje que el jugador controla
+              minItems: 1
+              maxItems: 3 # Máximo 3 acciones por el equipo de 3 personajes
+      responses:
+        '200':
+          description: Turno procesado. Devuelve el estado actualizado de la batalla.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BattleState' # Devuelve el estado completo de la batalla
+        '400':
+          description: Solicitud inválida (ej. acciones no válidas, personaje ya derrotado, tipo de ataque inválido).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Batalla no encontrada con el ID proporcionado o personaje no pertenece al equipo del jugador.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409': # Conflict
+          description: La batalla ya ha terminado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  # FIN DE NUEVOS ENDPOINTS PARA BATALLA INTERACTIVA POR TURNOS
 
   /villains:
     get:
@@ -355,7 +370,7 @@ paths:
           name: id
           schema:
             type: integer
-            format: int64 # INICIO DE CAMBIO: Usar int64 para IDs numéricos grandes si es necesario
+            format: int64
           required: true
           description: ID del villano a obtener
       responses:
@@ -378,7 +393,7 @@ paths:
           name: id
           schema:
             type: integer
-            format: int64 # INICIO DE CAMBIO: Usar int64 para IDs numéricos grandes si es necesario
+            format: int64
           required: true
           description: ID del villano a actualizar
       requestBody:
@@ -407,7 +422,7 @@ paths:
           name: id
           schema:
             type: integer
-            format: int64 # INICIO DE CAMBIO: Usar int64 para IDs numéricos grandes si es necesario
+            format: int64
           required: true
           description: ID del villano a eliminar
       responses:
@@ -453,14 +468,13 @@ paths:
 
 components:
   schemas:
-    # INICIO DE CAMBIO: Actualización de schemas Hero y Villain para incluir '_id', 'power' y 'health'
     Hero:
       type: object
       properties:
-        id: # Este campo 'id' en la respuesta se mapeará desde '_id' del documento de MongoDB
+        id:
           type: integer
           format: int64
-          readOnly: true # El ID es generado/controlado por la DB/sistema
+          readOnly: true
           example: 1
         name:
           type: string
@@ -474,22 +488,21 @@ components:
         team:
           type: string
           example: Liga de la Justicia
-        power: # Añadido el campo 'power'
+        power:
           type: integer
           example: 100
-        health: # Añadido el campo 'health'
+        health:
           type: integer
           example: 100
       required:
         - name
         - alias
-        - power # Ahora requerido si lo usas en el modelo
-        - health # Ahora requerido si lo usas en el modelo
+        - power
+        - health
 
     HeroInput:
       type: object
       properties:
-        # No se incluye 'id' aquí porque es para la creación y el ID lo proporciona el JSON/DB
         name:
           type: string
           example: Peter Parker
@@ -502,10 +515,10 @@ components:
         team:
           type: string
           example: Avengers
-        power: # Añadido el campo 'power'
+        power:
           type: integer
           example: 50
-        health: # Añadido el campo 'health'
+        health:
           type: integer
           example: 100
       required:
@@ -517,10 +530,10 @@ components:
     Villain:
       type: object
       properties:
-        id: # Este campo 'id' en la respuesta se mapeará desde '_id' del documento de MongoDB
+        id:
           type: integer
           format: int64
-          readOnly: true # El ID es generado/controlado por la DB/sistema
+          readOnly: true
           example: 101
         name:
           type: string
@@ -533,22 +546,21 @@ components:
           items:
             type: string
           example: ["Genius Intellect", "Kryptonite Armor"]
-        power: # Añadido el campo 'power'
+        power:
           type: integer
           example: 90
-        health: # Añadido el campo 'health'
+        health:
           type: integer
           example: 100
       required:
         - name
         - alias
-        - power # Ahora requerido si lo usas en el modelo
-        - health # Ahora requerido si lo usas en el modelo
+        - power
+        - health
 
     VillainInput:
       type: object
       properties:
-        # No se incluye 'id' aquí
         name:
           type: string
           example: Joker
@@ -560,10 +572,10 @@ components:
           items:
             type: string
           example: ["Chaos Incarnate", "Criminal Mastermind"]
-        power: # Añadido el campo 'power'
+        power:
           type: integer
           example: 70
-        health: # Añadido el campo 'health'
+        health:
           type: integer
           example: 100
       required:
@@ -571,55 +583,125 @@ components:
         - alias
         - power
         - health
-    # FIN DE CAMBIO: Actualización de schemas Hero y Villain
 
-    # INICIO DE NUEVA IMPLEMENTACIÓN: Schemas de componentes para la nueva funcionalidad de batalla
-    InteractiveBattleResult:
+    # INICIO DE NUEVOS SCHEMAS PARA LA BATALLA POR TURNOS
+    BattleStartRequest:
       type: object
       properties:
-        message:
+        playerSide:
           type: string
-          description: Mensaje final de la batalla.
-          example: "¡El equipo de Héroes ha ganado la batalla!"
-        battleDetails:
-          type: object
-          properties:
-            heroes:
-              type: array
-              items:
-                $ref: '#/components/schemas/BattleParticipantStatus'
-            villains:
-              type: array
-              items:
-                $ref: '#/components/schemas/BattleParticipantStatus'
-            winner:
-              type: string
-              description: El equipo ganador.
-              example: "Equipo de Héroes"
-            roundsFought:
-              type: integer
-              description: Número total de rondas de la batalla.
-              example: 15
-            log:
-              type: array
-              items:
-                type: string
-              description: Registro detallado de cada acción en la batalla.
-            playerSide:
-              type: string
-              description: El bando que el usuario eligió para controlar.
-              enum: [hero, villain]
-              example: hero
-            playerAttackType:
-              type: string
-              description: El tipo de ataque que el usuario eligió para su equipo.
-              enum: [basic, power, critical]
-              example: power
+          description: El bando que el usuario desea controlar en la batalla.
+          enum: [hero, villain]
+          example: hero
+        playerTeamIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+            minimum: 1
+          minItems: 3
+          maxItems: 3
+          description: Array de 3 IDs de los personajes para el equipo del jugador.
+          example: [1, 2, 3]
+        opponentTeamIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+            minimum: 1
+          minItems: 3
+          maxItems: 3
+          description: Array de 3 IDs de los personajes para el equipo oponente.
+          example: [101, 102, 103]
       required:
-        - message
-        - battleDetails
+        - playerSide
+        - playerTeamIds
+        - opponentTeamIds
 
-    BattleParticipantStatus: # Schema para el estado de un personaje en batalla
+    BattleStartResponse:
+      type: object
+      properties:
+        battleId:
+          type: string
+          format: uuid
+          description: ID único de la sesión de batalla.
+          example: "a1b2c3d4-e5f6-7890-1234-567890abcdef"
+        initialState:
+          $ref: '#/components/schemas/BattleState' # Devuelve el estado completo inicial
+      required:
+        - battleId
+        - initialState
+
+    PlayerAction:
+      type: object
+      properties:
+        characterId:
+          type: integer
+          format: int64
+          description: ID del personaje del jugador que realizará una acción en este turno.
+          example: 1
+        attackType:
+          type: string
+          description: Tipo de ataque a usar en este turno.
+          enum: [basic, power, critical]
+          example: power
+        targetId:
+          type: integer
+          format: int64
+          description: (Opcional) ID del personaje oponente al que se desea atacar. Si no se especifica, se elige un objetivo aleatorio.
+          example: 101
+      required:
+        - characterId
+        - attackType
+
+    BattleState: # Representa el estado actual de la batalla
+      type: object
+      properties:
+        battleId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: ID único de la sesión de batalla.
+          example: "a1b2c3d4-e5f6-7890-1234-567890abcdef"
+        roundNumber:
+          type: integer
+          description: Número de la ronda actual.
+          example: 1
+        playerTeam:
+          type: array
+          items:
+            $ref: '#/components/schemas/BattleCharacterStatus' # Estado detallado de los personajes del jugador
+          minItems: 3
+          maxItems: 3
+        opponentTeam:
+          type: array
+          items:
+            $ref: '#/components/schemas/BattleCharacterStatus' # Estado detallado de los personajes del oponente
+          minItems: 3
+          maxItems: 3
+        currentLog:
+          type: array
+          items:
+            type: string
+          description: Nuevos eventos ocurridos en la última ronda.
+          example: ["Superman ataca a Lex Luthor con ataque de poder. Lex Luthor pierde 30 de vida.", "Joker contraataca a Batman."]
+        overallLog:
+          type: array
+          items:
+            type: string
+          description: Registro acumulado de todos los eventos de la batalla.
+        status:
+          type: string
+          enum: [ongoing, player_won, opponent_won, draw]
+          description: Estado actual de la batalla.
+          example: ongoing
+        winner:
+          type: string
+          nullable: true
+          description: El equipo ganador (si la batalla ha terminado).
+          example: "player_team"
+
+    BattleCharacterStatus: # Estado de un solo personaje en la batalla (actualizado para incluir vida actual)
       type: object
       properties:
         id:
@@ -635,47 +717,49 @@ components:
           type: string
           description: Nombre real del personaje.
           example: "Clark Kent"
+        type:
+          type: string
+          enum: [hero, villain]
+          description: Tipo de personaje.
+          example: hero
         power:
           type: number
           description: Nivel de poder del personaje.
           example: 100
         initialHealth:
           type: number
-          description: Salud inicial del personaje al comienzo de la batalla.
+          description: Salud inicial del personaje.
           example: 100
-        remainingHealth:
+        currentHealth:
           type: number
-          description: Salud restante del personaje al final de la batalla.
-          example: 25
-        attackTypeUsed:
-          type: string
-          description: Tipo de ataque que el personaje utilizó durante la batalla.
-          enum: [basic, power, critical]
-          example: power
+          description: Salud actual del personaje.
+          example: 70
+        isDefeated:
+          type: boolean
+          description: Indica si el personaje ha sido derrotado.
+          example: false
       required:
         - id
         - alias
+        - type
         - power
         - initialHealth
-        - remainingHealth
-        - attackTypeUsed
+        - currentHealth
+        - isDefeated
 
-    ErrorResponse: # Un schema genérico para errores
+    ErrorResponse:
       type: object
       properties:
         error:
           type: string
           description: Mensaje de error.
-          example: "Héroe con ID 999 no encontrado."
-        errors: # Para errores de validación, si tu router devuelve un array de errores
+          example: "Batalla no encontrada."
+        errors:
           type: array
           items:
             type: object
             properties:
-              msg: { type: string, example: "Debe proporcionar exactamente 3 IDs para héroes." }
-              param: { type: string, example: "heroIds" }
+              msg: { type: string, example: "El ID del personaje no es válido." }
+              param: { type: string, example: "characterId" }
               location: { type: string, example: "body" }
-      # Puedes hacer 'error' o 'errors' requerido, o ambos opcionales si la respuesta puede variar
-      # required:
-      #   - error # O 'errors' dependiendo de tu implementación de manejo de errores
-    # FIN DE NUEVA IMPLEMENTACIÓN: Schemas de componentes para la nueva funcionalidad de batalla
+    # FIN DE NUEVOS SCHEMAS PARA LA BATALLA POR TURNOS
