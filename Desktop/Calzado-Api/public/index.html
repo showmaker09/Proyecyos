@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Datos - API Node.js</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Reparadora Calzado California </h1>
+
+        <!-- Sección de Gestión de suarios -->
+        <div class="entity-section">
+            <h2>Gestión de Usuarios</h2>
+            <div class="form-section">
+                <h3>Crear/Actualizar Usuario</h3>
+                <form id="userForm">
+                    <input type="hidden" id="userId">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" required>
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required>
+
+                    <!-- IDs originales del usuario -->
+                    <button type="submit" id="submitBtn">Crear Usuario</button>
+                    <button type="button" id="clearForm" style="display: none;">Limpiar Formulario</button>
+                </form>
+
+             <!-- Dentro de la sección de Gestión de Usuarios -->
+         <!-- Dentro de la sección de Gestión de Usuarios -->
+
+             </div> <!-- Cierre de div.form-section (Usuarios) -->
+
+            <div class="data-section">
+                <h3>Lista de Usuarios</h3>
+                <!-- Botón para cargar usuarios -->
+                <button type="button" id="loadUsersBtn" class="load-button">Cargar Usuarios</button>
+                <!-- ID original del mensaje de usuario -->
+                <p id="message" class="message"></p>    
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                           
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <!-- Los usuarios se cargarán aquí -->
+                    </tbody>
+                </table>
+            </div> <!-- Cierre de div.data-section (Usuarios) -->
+
+              
+
+        </div> <!-- Dentro de la sección de Gestión de Usuarios -->
+       
+       
+        <!-- Sección de Gestión de Dueños -->
+        <div class="entity-section"  id="ownerSection" style="display: none;" >  <!-- ESTO OCULTA LA SECCIÓN DE DUEÑOS -->
+       
+            <h2>Gestión de Dueños</h2>
+            <div class="form-section">
+                <h3>Crear/Actualizar Dueño</h3>
+                <form id="ownerForm">
+                    <input type="hidden" id="ownerId">
+                    <label for="ownerNombre">Nombre:</label>
+                    <input type="text" id="ownerNombre" required>
+
+                    <label for="ownerGanancia">Ganancia:</label>
+                    <input type="number" id="ownerGanancia" step="0.01" required>
+
+                    <button type="submit" id="submitOwnerBtn">Crear Dueño</button>
+                    <button type="button" id="clearOwnerForm" style="display: none;">Limpiar Formulario</button>
+                </form>
+            </div> <!-- Cierre de div.form-section (Dueños) -->
+
+            <div class="data-section">
+                <h3>Lista de Dueños</h3>
+                <p id="ownerMessage" class="message"></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Ganancia</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody id="ownersTableBody">
+                        <!-- Los dueños se cargarán aquí -->
+                    </tbody>
+                </table>
+            </div> <!-- Cierre de div.data-section (Dueños) -->
+        </div> <!-- Cierre de div.entity-section (Dueños) -->
+   
+   
+   
+   
+   
+
+    </div> <!-- Cierre de div.container -->
+       
+     
+
+
+
+
+
+    <script src="js/main.js"></script>
+</body>
+</html>
