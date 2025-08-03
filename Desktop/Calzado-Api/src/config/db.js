@@ -3,11 +3,11 @@ require('dotenv').config(); // Carga las variables de entorno
 const mysql = require('mysql2');
 
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'b0l5k8d6',
-    database: 'california_hernandez-may',
-    port: 3306 // Asegúrate de que el puerto sea correcto
+    host: '',
+    user: '',
+    password: '',
+    database: '',
+    port:  // Asegúrate de que el puerto sea correcto
 });
 
 connection.connect(err => {
