@@ -2,7 +2,8 @@
 // src/models/anticipoModel.js
 const db = require('../config/db'); // Asume que 'db' es tu conexión a la base de datos
 
-const anticipoModel = {
+const anticipoModel = 
+{
     // Ejecutar un Stored Procedure para obtener todos los anticipos
     getAllAnticipos: (callback) => {
         const sql = 'CALL SP_GetAnticipos()'; // Llama al SP para obtener todos los anticipos
@@ -16,7 +17,8 @@ const anticipoModel = {
     },
 
     // Ejecutar un Stored Procedure para añadir un nuevo anticipo
-    addAnticipo: (anticipoData, callback) => {
+    // cambiar a  createAnticipo
+    createAnticipo: (anticipoData, callback) => {
         const sql = 'CALL SP_AddAnticipo(?)'; // SP necesita 1 parámetro (Anticipo)
         const { Anticipo } = anticipoData;
 

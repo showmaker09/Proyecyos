@@ -1,12 +1,16 @@
 // src/models/articuloModel.js
 const db = require('../config/db'); // Asume que 'db' es tu conexión a la base de datos
 
-const articuloModel = {
+const articuloModel = 
+{
     // Ejecutar un Stored Procedure para obtener todos los artículos
-    getAllArticulos: (callback) => {
+    getAllArticulos: (callback) => 
+    {
         const sql = 'CALL SP_GetArticulos()'; // Llama al SP para obtener todos los artículos
-        db.query(sql, (err, results) => {
-            if (err) {
+        db.query(sql, (err, results) => 
+        {
+            if (err) 
+            {
                 console.error('Error al ejecutar SP_GetArticulos:', err);
                 return callback(err, null);
             }
@@ -16,7 +20,7 @@ const articuloModel = {
 
     // Ejecutar un Stored Procedure para añadir un nuevo artículo
     // Se corrigieron los campos para que coincidan con la función de actualización
-    addArticulo: (articuloData, callback) => {
+    createArticulo: (articuloData, callback) => {
         const sql = 'CALL SP_AddArticulo(?, ?, ?)'; // SP necesita 3 parámetros
         const { id_Tipo, id_cliente, Descripcion } = articuloData; // Campos corregidos
 

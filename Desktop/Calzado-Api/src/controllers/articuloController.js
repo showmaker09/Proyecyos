@@ -1,8 +1,11 @@
 const articuloModel = require('../models/articuloModel');
 
-const articuloController = {
-    getAllArticulos: (req, res) => {
-        articuloModel.getAllArticulos((err, articulos) => {
+const articuloController = 
+{
+    getAllArticulos: (req, res) => 
+    {
+        articuloModel.getAllArticulos((err, articulos) => 
+        {
             if (err) {
                 console.error('Error al obtener articulos:', err);
                 return res.status(500).json({ message: 'Error interno del servidor' });

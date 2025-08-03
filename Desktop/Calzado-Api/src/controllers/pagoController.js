@@ -1,4 +1,4 @@
-const userModel = require('../models/pagoModel');
+const pagoModel = require('../models/pagoModel');
 
 const pagoController = {
     getAllPagos: (req, res) => {

@@ -2,37 +2,35 @@ const clienteModel = require('../models/clienteModel');
 
 const clienteController = 
 {
-    getAllClients: (req, res) => {
-        clienteModel.getAllClients((err, clients) => 
-        {
+    getAllClientes: (req, res) => {
+        clienteModel.getAllClientes((err, clientes) => {
             if (err) {
                 console.error('Error al obtener clientes:', err);
                 return res.status(500).json({ message: 'Error interno del servidor' });
             }
-            res.status(200).json(clients);
+            res.status(200).json(clientes);
         });
     },
 
-    getClientById: (req, res) => 
+    getClienteById: (req, res) => 
     {
         const clientId = req.params.id;
-        clienteModel.getClientById(clientId, (err, client) => 
-        {
+        clienteModel.getClienteById(clientId, (err, cliente) => {
             if (err) {
                 console.error('Error al obtener cliente por ID:', err);
                 return res.status(500).json({ message: 'Error interno del servidor' });
             }
-            if (!client) {
+            if (!cliente) {
                 return res.status(404).json({ message: 'Cliente no encontrado' });
             }
-            res.status(200).json(client);
+            res.status(200).json(cliente);
         });
     },
 
-    createClient: (req, res) => 
+    createCliente: (req, res) => 
     {
         const clientData = req.body; // Los datos del nuevo cliente vienen en el cuerpo de la petición
-        clienteModel.createClient(clientData, (err, newClientId) => {
+        clienteModel.createCliente(clientData, (err, newClientId) => {
             if (err) {
                 console.error('Error al crear cliente:', err);
                 return res.status(500).json({ message: 'Error interno del servidor' });
@@ -41,10 +39,10 @@ const clienteController =
         });
     },
 
-    updateClient: (req, res) => {
+    updateCliente: (req, res) => {
         const clientId = req.params.id;
         const clientData = req.body;
-        clienteModel.updateClient(clientId, clientData, (err, affectedRows) => {
+        clienteModel.updateCliente(clientId, clientData, (err, affectedRows) => {
             if (err) {
                 console.error('Error al actualizar cliente:', err);
                 return res.status(500).json({ message: 'Error interno del servidor' });
@@ -56,9 +54,9 @@ const clienteController =
         });
     },
 
-    deleteClient: (req, res) => {
+    deleteCliente: (req, res) => {
         const clientId = req.params.id;
-        clienteModel.deleteClient(clientId, (err, affectedRows) => {
+        clienteModel.deleteCliente(clientId, (err, affectedRows) => {
             if (err) {
                 console.error('Error al eliminar cliente:', err);
                 return res.status(500).json({ message: 'Error interno del servidor' });

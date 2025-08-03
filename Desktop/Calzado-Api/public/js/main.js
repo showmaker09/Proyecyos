@@ -36,15 +36,7 @@ document.addEventListener('DOMContentLoaded', () =>
 
 
     // variables y elementos para anticipo
-    const anticipoForm = document.getElementById('anticipoForm');
-    const anticipoIdInput = document.getElementById('anticipoId');
-    const anticipoMontoInput = document.getElementById('anticipoMonto');
-    const submitAnticipoBtn = document.getElementById('submitAnticipoBtn');
-    const clearAnticipoFormBtn = document.getElementById('clearAnticipoForm');
-    const anticiposTableBody = document.getElementById('anticiposTableBody');
-    const anticipoMessageDisplay = document.getElementById('anticipoMessage'); // Mensaje específico para anticipos
-
-    const ANTICIPO_API_URL = 'http://localhost:3000/api/anticipos'; // ¡URL CORREGIDA para anticipos!
+    // ¡URL CORREGIDA para anticipos!
 
 
 
@@ -132,7 +124,8 @@ document.addEventListener('DOMContentLoaded', () =>
     function initUserCRUD() 
     {
         // Función para limpiar el formulario de usuario
-        function clearUserForm() {
+        function clearUserForm()
+         {
             userIdInput.value = '';
             nombreInput.value = '';
             emailInput.value = '';
@@ -195,7 +188,8 @@ document.addEventListener('DOMContentLoaded', () =>
         }
 
         // Crear o Actualizar usuario
-        userForm.addEventListener('submit', async (e) => {
+        userForm.addEventListener('submit', async (e) => 
+        {
             e.preventDefault();
             const id = userIdInput.value;
             const nombre = nombreInput.value;
@@ -208,10 +202,14 @@ document.addEventListener('DOMContentLoaded', () =>
                 let method;
                 let url;
 
-                if (id) { // Actualizar
+                if (id) 
+                { // Actualizar
                     method = 'PUT';
                     url = `${USER_API_URL}/${id}`;
-                } else { // Crear
+                }
+                 else 
+
+                { // Crear
                     method = 'POST';
                     url = USER_API_URL;
                 }
@@ -443,12 +441,23 @@ document.addEventListener('DOMContentLoaded', () =>
 
     // --- Lógica para ANTICIPOS ---
     function initAnticipoCRUD() 
-    {
+    {   
+    const anticipoForm = document.getElementById('anticipoForm');
+    const anticipoIdInput = document.getElementById('anticipoId');
+    const anticipoCantidadInput = document.getElementById('anticipoCantidad'); // Cambiado a cantidad
+    const submitAnticipoBtn = document.getElementById('submitAnticipoBtn');
+    const clearAnticipoFormBtn = document.getElementById('clearAnticipoForm');
+    const anticiposTableBody = document.getElementById('anticiposTableBody');
+    const anticipoMessageDisplay = document.getElementById('anticipoMessage'); // Mensaje específico para anticipos
+
+    const ANTICIPO_API_URL = 'http://localhost:3000/api/anticipos';
+
+        
         // Función para limpiar el formulario de anticipo
         function clearAnticipoForm() 
         {
             anticipoIdInput.value = '';
-            anticipoMontoInput.value = '';
+            anticipoCantidadInput.value = '';
             submitAnticipoBtn.textContent = 'Crear Anticipo';
             clearAnticipoFormBtn.style.display = 'none';
         }
@@ -495,7 +504,7 @@ document.addEventListener('DOMContentLoaded', () =>
                 editBtn.addEventListener('click', () => // Añadir evento de clic al botón de editar
                     {
                     anticipoIdInput.value = anticipo.id_anticipo; // Usar id_anticipo para el campo de ID
-                    anticipoMontoInput.value = anticipo.Monto; // Rellenar campo de Monto
+                    anticipoCantidadInput.value = anticipo.cantidad; // Rellenar campo de Cantidad
                     submitAnticipoBtn.textContent = 'Actualizar Anticipo'; // Cambiar texto del botón a "Actualizar Anticipo"
                     clearAnticipoFormBtn.style.display = 'inline-block'; // Mostrar botón de limpiar formulario
            
@@ -521,8 +530,8 @@ document.addEventListener('DOMContentLoaded', () =>
         {
            e.preventDefault();
            const id = anticipoIdInput.value; // REVISAR SI LA ID PERMANECE DE ESTA FORMA O SE CAMBIA EN anticipoData
-           const Monto = parseFloat(anticipoMontoInput.value); // Convertir a número flotante
-           const anticipoData = { id_anticipo: id, Monto: Monto }; // !ATENCION AQUI SI HAY ERROR REVISA AQUI   
+           const cantidad = parseFloat(anticipoCantidadInput.value); // Convertir a número flotante
+           const anticipoData = { id_anticipo: id, cantidad: cantidad }; // !ATENCION AQUI SI HAY ERROR REVISA AQUI   
 
 
          // Objeto con los datos correctos para la API
@@ -661,11 +670,12 @@ function initArticuloCRUD()
             articulosTableBody.innerHTML = '<tr><td colspan="5">No hay artículos registrados.</td></tr>';
             return;
         }
-        articulos.forEach(articulo => {
+        articulos.forEach(articulo => 
+        {
             const row = articulosTableBody.insertRow();
             row.insertCell().textContent = articulo.id_Articulo;
             row.insertCell().textContent = articulo.id_Tipo;
-            row.insertCell().textContent = articulo.id_Cliente;
+            row.insertCell().textContent = articulo.id_cliente; // debe estasr en minúscula porque es el nombre de la columna en la base de datos
             row.insertCell().textContent = articulo.Descripcion;
             const actionsCell = row.insertCell();
             actionsCell.className = 'action-buttons';
@@ -677,7 +687,7 @@ function initArticuloCRUD()
             {
                 articuloIdInput.value = articulo.id_Articulo;
                 articuloTipoInput.value = articulo.id_Tipo;
-                articuloClienteInput.value = articulo.id_Cliente;
+                articuloClienteInput.value = articulo.id_cliente;
                 articuloDescripcionInput.value = articulo.Descripcion;
                 submitArticuloBtn.textContent = 'Actualizar Artículo';
                 clearArticuloFormBtn.style.display = 'inline-block';
@@ -698,11 +708,11 @@ function initArticuloCRUD()
         e.preventDefault();
         const id = articuloIdInput.value;
         const id_Tipo = articuloTipoInput.value;
-        const id_Cliente = articuloClienteInput.value;
+        const id_cliente = articuloClienteInput.value;
         const Descripcion = articuloDescripcionInput.value;
 
         // El objeto de datos se crea con los nuevos campos
-        const articuloData = { id_Tipo, id_Cliente, Descripcion };
+        const articuloData = { id_Tipo, id_cliente, Descripcion };
 
         try 
         {

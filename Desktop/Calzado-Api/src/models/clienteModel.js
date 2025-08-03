@@ -2,7 +2,8 @@
 // src/models/clienteModel.js
 const db = require('../config/db'); // Asume que 'db' es tu conexión a la base de datos
 
-const clienteModel = {
+const clienteModel = 
+{
     // Ejecutar un Stored Procedure para obtener todos los clientes
     getAllClientes: (callback) => {
         const sql = 'CALL SP_GetClientes()'; // Llama al SP para obtener todos los clientes

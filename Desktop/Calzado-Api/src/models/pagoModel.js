@@ -2,7 +2,8 @@
 // src/models/pagoModel.js
 const db = require('../config/db'); // Asume que 'db' es tu conexión a la base de datos
 
-const pagoModel = {
+const pagoModel = 
+{
     // Ejecutar un Stored Procedure para obtener todos los pagos
     getAllPagos: (callback) => {
         const sql = 'CALL SP_GetPagos()'; // Llama al SP para obtener todos los pagos

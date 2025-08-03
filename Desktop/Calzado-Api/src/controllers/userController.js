@@ -2,7 +2,8 @@
 // este codigo define un controlador de usuario para manejar las peticiones HTTP relacionadas con los usuarios
 const userModel = require('../models/userModel');
 
-const userController = {
+const userController = 
+{
     getAllUsers: (req, res) => {
         userModel.getAllUsers((err, users) => {
             if (err) {

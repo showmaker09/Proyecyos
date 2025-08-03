@@ -24,10 +24,13 @@ const anticipoController = {
             res.status(200).json(anticipo);
         });
     },
-
-    createAnticipo: (req, res) => {
+    
+    // VERIFICAR SI SE DEBE CAMBIAR A createAnticipo
+    createAnticipo: (req, res) => 
+    {
         const anticipoData = req.body;
-        anticipoModel.createAnticipo(anticipoData, (err, newAnticipoId) => {
+        anticipoModel.createAnticipo(anticipoData, (err, newAnticipoId) => 
+        {
             if (err) {
                 console.error('Error al crear anticipo:', err);
                 return res.status(500).json({ message: 'Error interno del servidor' });
@@ -36,7 +39,7 @@ const anticipoController = {
         });
     },
 
-    updateAnticipo: (req, res) => {
+    updateAnticipo: (req, res) => { 
         const anticipoId = req.params.id;
         const anticipoData = req.body;
         anticipoModel.updateAnticipo(anticipoId, anticipoData, (err, affectedRows) => {

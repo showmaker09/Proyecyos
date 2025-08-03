@@ -19,7 +19,8 @@ const userModel = {
 
     // Ejecutar un Stored Procedure para crear un usuario
     // Asumiendo que tienes un SP llamado 'CreateUserSP(p_nombre VARCHAR(255), p_email VARCHAR(255))'
-    createUser: (userData, callback) => {
+    createUser: (userData, callback) => 
+    {
         const sql = 'CALL CreateUserSP(?, ?)'; // Marcadores de posición para los parámetros
         const { nombre, email } = userData; // Asumiendo que userData tiene nombre y email
 
