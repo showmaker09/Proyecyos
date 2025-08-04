@@ -17,11 +17,11 @@ const materialModel =
     },  
 
     // Ejecutar un Stored Procedure para añadir un nuevo material
-    addMaterial: (materialData, callback) => {
+    createMaterial: (materialData, callback) => {
         const sql = 'CALL SP_AddMaterial(?, ?)'; // SP necesita 2 parámetros (nombre, cantidad)
-        const { nombre, cantidad } = materialData;
+        const { Nombre, Cantidad } = materialData;
 
-        db.query(sql, [nombre, cantidad], (err, results) => {
+        db.query(sql, [Nombre, Cantidad], (err, results) => {
             if (err) {
                 console.error('Error al ejecutar SP_AddMaterial:', err);
                 return callback(err, null);

@@ -2,6 +2,7 @@
 // src/models/montoModel.js
 const db = require('../config/db'); // Asume que 'db' es tu conexión a la base de datos
 
+
 const montoModel = 
 {
     // Ejecutar un Stored Procedure para obtener todos los montos
@@ -18,7 +19,7 @@ const montoModel =
     },
 
     // Ejecutar un Stored Procedure para añadir un nuevo monto
-    addMonto: (montoData, callback) => {
+    createMonto: (montoData, callback) => {
         const sql = 'CALL SP_AddMonto(?)'; // SP necesita 1 parámetro (monto_pago)
         const { monto_pago } = montoData;
 

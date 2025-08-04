@@ -1,6 +1,7 @@
 // src/models/servicioModel.js
 const db = require('../config/db'); // Asume que 'db' es tu conexión a la base de datos
 
+
 const servicioModel = 
 {
     // Ejecutar un Stored Procedure para obtener todos los servicios
@@ -16,7 +17,7 @@ const servicioModel =
     },
 
     // Ejecutar un Stored Procedure para añadir un nuevo servicio
-    addServicio: (servicioData, callback) => {
+    createServicio: (servicioData, callback) => {
         const sql = 'CALL SP_AddServicio(?, ?)'; // SP necesita 2 parámetros (Tipo, Precio)
         const { Tipo, Precio } = servicioData;
 

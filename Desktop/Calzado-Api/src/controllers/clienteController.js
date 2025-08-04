@@ -15,7 +15,8 @@ const clienteController =
     getClienteById: (req, res) => 
     {
         const clientId = req.params.id;
-        clienteModel.getClienteById(clientId, (err, cliente) => {
+        clienteModel.getClienteById(clientId, (err, cliente) =>
+         {
             if (err) {
                 console.error('Error al obtener cliente por ID:', err);
                 return res.status(500).json({ message: 'Error interno del servidor' });

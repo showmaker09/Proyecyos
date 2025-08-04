@@ -2,6 +2,7 @@
 // src/models/clienteModel.js
 const db = require('../config/db'); // Asume que 'db' es tu conexión a la base de datos
 
+
 const clienteModel = 
 {
     // Ejecutar un Stored Procedure para obtener todos los clientes
@@ -17,7 +18,7 @@ const clienteModel =
     },
 
     // Ejecutar un Stored Procedure para añadir un nuevo cliente
-    addCliente: (clienteData, callback) => {
+    createCliente: (clienteData, callback) => {
         const sql = 'CALL SP_AddCliente(?, ?)'; // SP necesita 2 parámetros (Nombre, id_Anticipo)
         const { Nombre, id_Anticipo } = clienteData;
 

@@ -2,6 +2,7 @@
 // src/models/pagoModel.js
 const db = require('../config/db'); // Asume que 'db' es tu conexión a la base de datos
 
+
 const pagoModel = 
 {
     // Ejecutar un Stored Procedure para obtener todos los pagos
@@ -19,12 +20,12 @@ const pagoModel =
     },
 
     // Ejecutar un Stored Procedure para añadir un nuevo pago
-    addPago: (pagoData, callback) => 
+    createPago: (pagoData, callback) => 
     {
         const sql = 'CALL SP_AddPago(?, ?, ?, ?)'; // SP necesita 4 parámetros
-        const { id_Reparacion, id_Cliente, Fecha_Pago, id_Monto } = pagoData;
+        const { id_Reparacion, id_cliente, Fecha_Pago, id_Monto } = pagoData;
 
-        db.query(sql, [id_Reparacion, id_Cliente, Fecha_Pago, id_Monto], (err, results) => 
+        db.query(sql, [id_Reparacion, id_cliente, Fecha_Pago, id_Monto], (err, results) => 
         {
             if (err) {
                 console.error('Error al ejecutar SP_AddPago:', err);

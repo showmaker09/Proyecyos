@@ -2,7 +2,8 @@
 // src/models/reparacionModel.js
 const db = require('../config/db'); // Asume que 'db' es tu conexión a la base de datos
 
-const reparacionModel = {
+const reparacionModel = 
+{
     // Ejecutar un Stored Procedure para obtener todas las reparaciones
     getAllReparaciones: (callback) => {
         const sql = 'CALL SP_GetReparaciones()'; // Llama al SP para obtener todas las reparaciones
@@ -16,11 +17,11 @@ const reparacionModel = {
     },
 
     // Ejecutar un Stored Procedure para añadir una nueva reparación
-    addReparacion: (reparacionData, callback) => {
-        const sql = 'CALL SP_AddReparacion(?, ?, ?, ?)'; // SP necesita 4 parámetros
-        const { Fecha_entrega, Observaciones, id_Servicio, id_Articulo } = reparacionData;
+    createReparacion: (reparacionData, callback) => {
+        const sql = 'CALL SP_AddReparacion(?, ?, ?, ?, ?)'; // SP necesita 5 parámetros
+        const { Fecha_ingreso, Fecha_entrega, Observaciones, id_Servicio, id_Articulo } = reparacionData;
 
-        db.query(sql, [Fecha_entrega, Observaciones, id_Servicio, id_Articulo], (err, results) => {
+        db.query(sql, [Fecha_ingreso, Fecha_entrega, Observaciones, id_Servicio, id_Articulo], (err, results) => {
             if (err) {
                 console.error('Error al ejecutar SP_AddReparacion:', err);
                 return callback(err, null);
@@ -45,9 +46,9 @@ const reparacionModel = {
     // Ejecutar un Stored Procedure para actualizar una reparación existente
     updateReparacion: (id_Reparacion, reparacionData, callback) => {
         const sql = 'CALL SP_UpdateReparacion(?, ?, ?, ?, ?)'; // SP necesita 5 parámetros
-        const { Fecha_entrega, Observaciones, id_Servicio, id_Articulo } = reparacionData;
+        const { Fecha_Ingreso, Fecha_entrega, Observaciones, id_Servicio, id_Articulo } = reparacionData;
 
-        db.query(sql, [id_Reparacion, Fecha_entrega, Observaciones, id_Servicio, id_Articulo], (err, results) => {
+        db.query(sql, [id_Reparacion, Fecha_Ingreso, Fecha_entrega, Observaciones, id_Servicio, id_Articulo], (err, results) => {
             if (err) {
                 console.error('Error al ejecutar SP_UpdateReparacion:', err);
                 return callback(err, null);

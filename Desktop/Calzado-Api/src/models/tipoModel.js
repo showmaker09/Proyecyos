@@ -16,7 +16,7 @@ const tipoModel = {
     },
 
     // Ejecutar un Stored Procedure para añadir un nuevo tipo
-    addTipo: (tipoData, callback) => {
+    createTipo: (tipoData, callback) => {
         const sql = 'CALL SP_AddTipo(?)'; // SP necesita 1 parámetro (Tipo)
         const { Tipo } = tipoData;
 

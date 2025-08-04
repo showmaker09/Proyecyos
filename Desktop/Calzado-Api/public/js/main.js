@@ -814,7 +814,8 @@ function initClienteCRUD()
     }
 
     // Cargar todos los clientes
-    async function fetchClientes() {
+    async function fetchClientes() 
+    {
         try {
             const response = await fetch(CLIENTE_API_URL);
             if (!response.ok) {
@@ -869,7 +870,8 @@ function initClienteCRUD()
     }
 
     // Crear o Actualizar cliente
-    clienteForm.addEventListener('submit', async (e) => {
+    clienteForm.addEventListener('submit', async (e) => 
+    {
         e.preventDefault();
         const id = clienteIdInput.value;
         const Nombre = clienteNombreInput.value;
@@ -1500,7 +1502,7 @@ function initReparacionCRUD()
     reparacionForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const id = reparacionIdInput.value;
-        const Fecha_ingreso = reparacionFechaIngresoInput.value;
+        const Fecha_ingreso  = reparacionFechaIngresoInput.value;
         const Fecha_entrega = reparacionFechaEntregaInput.value;
         const Observaciones = reparacionObservacionesInput.value;
         const id_Servicio = reparacionServicioInput.value;
