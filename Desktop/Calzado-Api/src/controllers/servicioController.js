@@ -1,7 +1,8 @@
 const servicioModel = require('../models/servicioModel');
 
 const servicioController = {
-    getAllServicios: (req, res) => {
+    getAllServicios: (req, res) => 
+    {
         servicioModel.getAllServicios((err, servicios) => {
             if (err) {
                 console.error('Error al obtener servicios:', err);

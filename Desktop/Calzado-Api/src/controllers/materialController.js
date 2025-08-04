@@ -1,17 +1,19 @@
-const userModel = require('../models/materialModel');
+const materialModel = require('../models/materialModel');
 
 const materialController = {
-    getAllMaterials: (req, res) => {
-        materialModel.getAllMaterials((err, materials) => {
+    getAllMateriales: (req, res) => 
+    {
+        materialModel.getAllMateriales((err, materiales) => {
             if (err) {
                 console.error('Error al obtener materiales:', err);
                 return res.status(500).json({ message: 'Error interno del servidor' });
             }
-            res.status(200).json(materials);
+            res.status(200).json(materiales);
         });
     },
 
-    getMaterialById: (req, res) => {
+    getMaterialById: (req, res) =>
+     {
         const materialId = req.params.id;
         materialModel.getMaterialById(materialId, (err, material) => {
             if (err) {

@@ -836,7 +836,8 @@ function initClienteCRUD()
             clientesTableBody.innerHTML = '<tr><td colspan="4">No hay clientes registrados.</td></tr>';
             return;
         }
-        clientes.forEach(cliente => {
+        clientes.forEach(cliente => 
+        {
             const row = clientesTableBody.insertRow();
             // Los campos que se muestran en la tabla coinciden con el nuevo modelo
             row.insertCell().textContent = cliente.id_Cliente;
@@ -966,7 +967,8 @@ function initMaterialCRUD()
     }
 
     // Cargar todos los materiales
-    async function fetchMateriales() {
+    async function fetchMateriales() 
+    {
         try {
             const response = await fetch(MATERIAL_API_URL);
             if (!response.ok) {
@@ -982,13 +984,15 @@ function initMaterialCRUD()
     }
 
     // Mostrar materiales en la tabla
-    function displayMateriales(materiales) {
+    function displayMateriales(materiales) 
+    {
         materialesTableBody.innerHTML = ''; // Limpiar tabla
         if (materiales.length === 0) {
             materialesTableBody.innerHTML = '<tr><td colspan="4">No hay materiales registrados.</td></tr>';
             return;
         }
-        materiales.forEach(material => {
+            materiales.forEach(material => 
+        {
             const row = materialesTableBody.insertRow();
             row.insertCell().textContent = material.id_Material;
             row.insertCell().textContent = material.Nombre;
@@ -999,7 +1003,8 @@ function initMaterialCRUD()
             const editBtn = document.createElement('button');
             editBtn.textContent = 'Editar';
             editBtn.className = 'edit-btn';
-            editBtn.addEventListener('click', () => {
+            editBtn.addEventListener('click', () => 
+            {
                 materialIdInput.value = material.id_Material;
                 materialNombreInput.value = material.Nombre;
                 materialCantidadInput.value = material.Cantidad;
@@ -1104,10 +1109,11 @@ function initMontoCRUD()
     const montosTableBody = document.getElementById('montosTableBody');
     const montoMessageDisplay = document.getElementById('montoMessage');
 
-    const MONTO_API_URL = 'http://localhost:3000/api/monto_pagos'; // URL de la API para montos de pago
+    const MONTO_API_URL = 'http://localhost:3000/api/montos'; // URL de la API para montos de pago
 
     // Función para limpiar el formulario de monto
-    function clearMontoForm() {
+    function clearMontoForm() 
+    {
         montoIdInput.value = '';
         montoPagoInput.value = '';
         submitMontoBtn.textContent = 'Crear Monto';
@@ -1115,7 +1121,8 @@ function initMontoCRUD()
     }
 
     // Cargar todos los montos de pago
-    async function fetchMontos() {
+    async function fetchMontos() 
+    {
         try {
             const response = await fetch(MONTO_API_URL);
             if (!response.ok) {
@@ -1131,13 +1138,16 @@ function initMontoCRUD()
     }
 
     // Mostrar montos de pago en la tabla
-    function displayMontos(montos) {
+    function displayMontos(montos)
+     {
         montosTableBody.innerHTML = ''; // Limpiar tabla
-        if (montos.length === 0) {
+        if (montos.length === 0) 
+        {
             montosTableBody.innerHTML = '<tr><td colspan="3">No hay montos de pago registrados.</td></tr>';
             return;
         }
-        montos.forEach(monto => {
+        montos.forEach(monto => 
+        {
             const row = montosTableBody.insertRow();
             row.insertCell().textContent = monto.id_Monto_Pago;
             row.insertCell().textContent = monto.monto_pago;
@@ -1147,7 +1157,8 @@ function initMontoCRUD()
             const editBtn = document.createElement('button');
             editBtn.textContent = 'Editar';
             editBtn.className = 'edit-btn';
-            editBtn.addEventListener('click', () => {
+            editBtn.addEventListener('click', () => 
+            {
                 montoIdInput.value = monto.id_Monto_Pago;
                 montoPagoInput.value = monto.monto_pago;
                 submitMontoBtn.textContent = 'Actualizar Monto';
@@ -1236,12 +1247,13 @@ function initMontoCRUD()
 }
    
   // --- Lógica para PAGOS ---
-function initPagoCRUD() {
+function initPagoCRUD() 
+{
     // Variables y Elementos del DOM para PAGOS
     const pagoForm = document.getElementById('pagoForm');
     const pagoIdInput = document.getElementById('pagoId');
     const pagoReparacionInput = document.getElementById('pagoReparacion');
-    const pagoClienteInput = document.getElementById('pagoCliente');
+    const pagoclienteInput = document.getElementById('pagocliente');
     const pagoFechaInput = document.getElementById('pagoFecha');
     const pagoMontoInput = document.getElementById('pagoMonto');
     const submitPagoBtn = document.getElementById('submitPagoBtn');
@@ -1252,10 +1264,11 @@ function initPagoCRUD() {
     const PAGO_API_URL = 'http://localhost:3000/api/pagos'; // URL de la API para pagos
 
     // Función para limpiar el formulario de pago
-    function clearPagoForm() {
+    function clearPagoForm() 
+    {
         pagoIdInput.value = '';
         pagoReparacionInput.value = '';
-        pagoClienteInput.value = '';
+        pagoclienteInput.value = '';
         pagoFechaInput.value = '';
         pagoMontoInput.value = '';
         submitPagoBtn.textContent = 'Crear Pago';
@@ -1263,7 +1276,8 @@ function initPagoCRUD() {
     }
 
     // Cargar todos los pagos
-    async function fetchPagos() {
+    async function fetchPagos() 
+    {
         try {
             const response = await fetch(PAGO_API_URL);
             if (!response.ok) {
@@ -1279,17 +1293,19 @@ function initPagoCRUD() {
     }
 
     // Mostrar pagos en la tabla
-    function displayPagos(pagos) {
+    function displayPagos(pagos) 
+    {
         pagosTableBody.innerHTML = ''; // Limpiar tabla
         if (pagos.length === 0) {
             pagosTableBody.innerHTML = '<tr><td colspan="6">No hay pagos registrados.</td></tr>';
             return;
         }
-        pagos.forEach(pago => {
+        pagos.forEach(pago => 
+        {
             const row = pagosTableBody.insertRow();
             row.insertCell().textContent = pago.id_Pago;
             row.insertCell().textContent = pago.id_Reparacion;
-            row.insertCell().textContent = pago.id_Cliente;
+            row.insertCell().textContent = pago.id_cliente;
             row.insertCell().textContent = pago.Fecha_Pago;
             row.insertCell().textContent = pago.id_Monto;
             const actionsCell = row.insertCell();
@@ -1301,7 +1317,7 @@ function initPagoCRUD() {
             editBtn.addEventListener('click', () => {
                 pagoIdInput.value = pago.id_Pago;
                 pagoReparacionInput.value = pago.id_Reparacion;
-                pagoClienteInput.value = pago.id_Cliente;
+                pagoclienteInput.value = pago.id_cliente; // debe estar en minúscula porque es el nombre de la columna en la base de datos
                 pagoFechaInput.value = pago.Fecha_Pago;
                 pagoMontoInput.value = pago.id_Monto;
                 submitPagoBtn.textContent = 'Actualizar Pago';
@@ -1322,12 +1338,12 @@ function initPagoCRUD() {
         e.preventDefault();
         const id = pagoIdInput.value;
         const id_Reparacion = pagoReparacionInput.value;
-        const id_Cliente = pagoClienteInput.value;
+        const id_cliente = pagoclienteInput.value;
         const Fecha_Pago = pagoFechaInput.value;
         const id_Monto = pagoMontoInput.value;
 
         // Se crea un objeto con la estructura del modelo de pago
-        const pagoData = { id_Reparacion, id_Cliente, Fecha_Pago, id_Monto };
+        const pagoData = { id_Reparacion, id_cliente, Fecha_Pago, id_Monto };
 
         try {
             let response;
@@ -1394,7 +1410,8 @@ function initPagoCRUD() {
    
 
 // --- Lógica para REPARACIONES ---
-function initReparacionCRUD() {
+function initReparacionCRUD() 
+{
     // Variables y Elementos del DOM para REPARACIONES
     const reparacionForm = document.getElementById('reparacionForm');
     const reparacionIdInput = document.getElementById('reparacionId');
@@ -1561,7 +1578,8 @@ function initReparacionCRUD() {
 }
  
 // --- Lógica para SERVICIOS ---
-function initServicioCRUD() {
+function initServicioCRUD() 
+{
     // Variables y Elementos del DOM para SERVICIOS
     const servicioForm = document.getElementById('servicioForm');
     const servicioIdInput = document.getElementById('servicioId');
@@ -1575,7 +1593,8 @@ function initServicioCRUD() {
     const SERVICIO_API_URL = 'http://localhost:3000/api/servicios'; // URL de la API para servicios
 
     // Función para limpiar el formulario de servicio
-    function clearServicioForm() {
+    function clearServicioForm() 
+    {
         servicioIdInput.value = '';
         servicioTipoInput.value = '';
         servicioPrecioInput.value = '';

@@ -1,18 +1,20 @@
 // src/models/materialModel.js
 const db = require('../config/db'); // Asume que 'db' es tu conexión a la base de datos
 
-const materialModel = {
+const materialModel = 
+{
     // Ejecutar un Stored Procedure para obtener todos los materiales
-    getAllMateriales: (callback) => {
-        const sql = 'CALL SP_GetMateriales()'; // Llama al SP para obtener todos los materiales
+    getAllMateriales: (callback) => 
+    {
+        const sql = 'CALL SP_GetMaterials()'; // Llama al SP para obtener todos los materiales
         db.query(sql, (err, results) => {
             if (err) {
-                console.error('Error al ejecutar SP_GetMateriales:', err);
+                console.error('Error al ejecutar SP_GetMaterials:', err);
                 return callback(err, null);
             }
             callback(null, results[0]);
         });
-    },
+    },  
 
     // Ejecutar un Stored Procedure para añadir un nuevo material
     addMaterial: (materialData, callback) => {

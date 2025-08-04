@@ -2,9 +2,11 @@
 // src/models/montoModel.js
 const db = require('../config/db'); // Asume que 'db' es tu conexión a la base de datos
 
-const montoModel = {
+const montoModel = 
+{
     // Ejecutar un Stored Procedure para obtener todos los montos
-    getAllMontos: (callback) => {
+    getAllMontos: (callback) => 
+    {
         const sql = 'CALL SP_GetMontos()'; // Llama al SP para obtener todos los montos
         db.query(sql, (err, results) => {
             if (err) {

@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const servicioController = require('../controllers/servicioController');
+const materialController = require('../controllers/materialController');
 
-// Rutas para la gestión de servicios
-router.get('/', servicioController.getAllServicios); // GET /api/servicios
-router.get('/:id', servicioController.getServicioById); // GET /api/servicios/:id
-router.post('/', servicioController.createServicio); // POST /api/servicios
-router.put('/:id', servicioController.updateServicio); // PUT /api/servicios/:id
-router.delete('/:id', servicioController.deleteServicio); // DELETE /api/servicios/:id
+// Rutas para la gestión de materiales
+router.get('/', materialController.getAllMateriales); // GET /api/materiales
+router.get('/:id', materialController.getMaterialById); // GET /api/materiales/:id
+router.post('/', materialController.createMaterial); // POST /api/materiales
+router.put('/:id', materialController.updateMaterial); // PUT /api/materiales/:id
+router.delete('/:id', materialController.deleteMaterial); // DELETE /api/materiales/:id
 
 module.exports = router;

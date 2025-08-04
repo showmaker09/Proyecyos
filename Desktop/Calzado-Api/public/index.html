@@ -100,31 +100,34 @@
    
        
    
-    <!-- Sección de Gestión de Anticipos -->
-<div class="entity-section" id="anticipoSection">
-    <!-- ESTO OCULTA LA SECCIÓN DE ANTICIPOS -->
+ <!-- Sección de Gestión de Anticipos -->
+<div class="entity-section" id="anticipoSection" >
     <h2>Gestión de Anticipos</h2>
     <div class="form-section">
         <h3>Crear/Actualizar Anticipo</h3>
         <form id="anticipoForm">
+            <!-- ID oculto para la edición de anticipos -->
             <input type="hidden" id="anticipoId">
-            <label for="anticipoCantidad">Cantidad:</label>
-            <input type="number" id="anticipoCantidad" step="0.01" required>
+            
+            <div class="form-group">
+                <label for="anticipoCantidad">Cantidad:</label>
+                <input type="number" id="anticipoCantidad" step="0.01" required>
+            </div>
 
             <button type="submit" id="submitAnticipoBtn">Crear Anticipo</button>
             <button type="button" id="clearAnticipoForm" style="display: none;">Limpiar Formulario</button>
         </form>
     </div>
-    <!-- Cierre de div.form-section (Anticipos) -->
 
     <div class="data-section">
         <h3>Lista de Anticipos</h3>
+        <!-- Botón para cargar anticipos (opcional si la carga es automática) -->
         <button type="button" id="loadAnticiposBtn" class="load-button">Cargar Anticipos</button>
         <p id="anticipoMessage" class="message"></p>
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>ID Anticipo</th>
                     <th>Cantidad</th>
                     <th class="action-buttons-header">Acciones</th>
                 </tr>
@@ -134,9 +137,16 @@
             </tbody>
         </table>
     </div>
-    <!-- Cierre de div.data-section (Anticipos) -->
 </div>
-<!-- Cierre de div.entity-section (Anticipos) -->
+
+
+
+  
+
+
+
+
+
 
   
   <!-- Sección de Gestión de Artículos -->
@@ -186,6 +196,297 @@
 
 
  
+<!-- Sección de Gestión de Clientes -->
+<div class="entity-section" id="clienteSection" >
+    <h2>Gestión de Clientes</h2>
+    <div class="form-section">
+        <h3>Crear/Actualizar Cliente</h3>
+        <form id="clienteForm">
+            <input type="hidden" id="idCliente">
+            
+            <div class="form-group">
+                <label for="clienteNombre">Nombre:</label>
+                <input type="text" id="clienteNombre" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="clienteIdAnticipo">id_Anticipo:</label>
+                <input type="number" id="clienteIdAnticipo" required>
+            </div>
+
+            <button type="submit" id="submitClienteBtn">Crear Cliente</button>
+            <button type="button" id="clearClienteForm" style="display: none;">Limpiar Formulario</button>
+        </form>
+    </div>
+
+    <div class="data-section">
+        <h3>Lista de Clientes</h3>
+        <button type="button" id="loadClientesBtn" class="load-button">Cargar Clientes</button>
+        <p id="clienteMessage" class="message"></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>id_Cliente</th>
+                    <th>Nombre</th>
+                    <th>id_Anticipo</th>
+                    <th class="action-buttons-header">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="clientesTableBody">
+                <!-- Los clientes se cargarán aquí -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+  
+  <!-- Sección de Gestión de Materiales -->
+<div class="entity-section" id="materialSection" >
+    <h2>Gestión de Materiales</h2>
+    <div class="form-section">
+        <h3>Crear/Actualizar Material</h3>
+        <form id="materialForm">
+            <input type="hidden" id="idMaterial">
+            
+            <div class="form-group">
+                <label for="materialNombre">Nombre:</label>
+                <input type="text" id="materialNombre" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="materialCantidad">Cantidad:</label>
+                <input type="number" id="materialCantidad" required>
+            </div>
+
+            <button type="submit" id="submitMaterialBtn">Crear Material</button>
+            <button type="button" id="clearMaterialForm" style="display: none;">Limpiar Formulario</button>
+        </form>
+    </div>
+
+    <div class="data-section">
+        <h3>Lista de Materiales</h3>
+        <button type="button" id="loadMaterialesBtn" class="load-button">Cargar Materiales</button>
+        <p id="materialMessage" class="message"></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>id_Material</th>
+                    <th>Nombre</th>
+                    <th>Cantidad</th>
+                    <th class="action-buttons-header">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="materialesTableBody">
+                <!-- Los materiales se cargarán aquí -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!-- Sección de Gestión de Montos -->
+<div class="entity-section" id="montoSection" >
+    <h2>Gestión de Montos</h2>
+    <div class="form-section">
+        <h3>Crear/Actualizar Monto</h3>
+        <form id="montoPagoForm">
+            <!-- ID corregido para coincidir con tu función: 'montoId' -->
+            <input type="hidden" id="montoId">
+            
+            <div class="form-group">
+                <label for="montoPago">Monto de Pago:</label>
+                <!-- ID corregido para coincidir con tu función: 'montoPago' -->
+                <input type="number" id="montoPago" required>
+            </div>
+
+            <button type="submit" id="submitMontoBtn">Crear Monto</button>
+            <button type="button" id="clearMontoForm" style="display: none;">Limpiar Formulario</button>
+        </form>
+    </div>
+
+    <div class="data-section">
+        <h3>Lista de Montos</h3>
+        <button type="button" id="loadMontosBtn" class="load-button">Cargar Montos</button>
+        <p id="montoMessage" class="message"></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>id_Monto_Pago</th>
+                    <th>monto_pago</th>
+                    <th class="action-buttons-header">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="montosTableBody">
+                <!-- Los montos se cargarán aquí -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+
+<!-- Sección de Gestión de Pagos -->
+<div class="entity-section" id="pagoSection" >
+    <h2>Gestión de Pagos</h2>
+    <div class="form-section">
+        <h3>Crear/Actualizar Pago</h3>
+        <form id="pagoForm">
+            <input type="hidden" id="idPago">
+            
+            <div class="form-group">
+                <label for="pagoReparacion">id_Reparacion:</label>
+                <input type="number" id="pagoReparacion" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="pagoIdCliente">id_cliente:</label>
+                <input type="number" id="pagocliente" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="pagoFecha">Fecha_Pago:</label>
+                <input type="number" id="pagoFecha" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="pagoMonto">id_Monto:</label>
+                <input type="number" id="pagoMonto" required>
+            </div>
+
+            <button type="submit" id="submitPagoBtn">Crear Pago</button>
+            <button type="button" id="clearPagoForm" style="display: none;">Limpiar Formulario</button>
+        </form>
+    </div>
+
+    <div class="data-section">
+        <h3>Lista de Pagos</h3>
+        <button type="button" id="loadPagosBtn" class="load-button">Cargar Pagos</button>
+        <p id="pagoMessage" class="message"></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>id_Pago</th>
+                    <th>id_Reparacion</th>
+                    <th>id_cliente</th>
+                    <th>Fecha_Pago</th>
+                    <th>id_Monto</th>
+                    <th class="action-buttons-header">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="pagosTableBody">
+                <!-- Los pagos se cargarán aquí -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+  
+<!-- Sección de Gestión de Reparaciones -->
+<div class="entity-section" id="reparacionSection" >
+    <h2>Gestión de Reparaciones</h2>
+    <div class="form-section">
+        <h3>Crear/Actualizar Reparación</h3>
+        <form id="reparacionForm">
+            <!-- ID oculto para la edición de reparaciones -->
+            <input type="hidden" id="reparacionId">
+            
+            <div class="form-group">
+                <label for="reparacionFechaIngreso">Fecha de Ingreso:</label>
+                <input type="number" id="reparacionFechaIngreso" required>
+            </div>
+            <div class="form-group">
+                <label for="reparacionFechaEntrega">Fecha de Entrega:</label>
+                <input type="number" id="reparacionFechaEntrega">
+            </div>
+            <div class="form-group">
+                <label for="reparacionObservaciones">Observaciones:</label>
+                <input type="text" id="reparacionObservaciones">
+            </div>
+            <div class="form-group">
+                <label for="reparacionServicio">ID del Servicio:</label>
+                <input type="text" id="reparacionServicio" required>
+            </div>
+            <div class="form-group">
+                <label for="reparacionArticulo">ID del Artículo:</label>
+                <input type="text" id="reparacionArticulo" required>
+            </div>
+
+            <button type="submit" id="submitReparacionBtn">Crear Reparación</button>
+            <button type="button" id="clearReparacionForm" style="display: none;">Limpiar Formulario</button>
+        </form>
+    </div>
+
+    <div class="data-section">
+        <h3>Lista de Reparaciones</h3>
+        <button type="button" id="loadReparacionesBtn" class="load-button">Cargar Reparaciones</button>
+        <p id="reparacionMessage" class="message"></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Reparación</th>
+                    <th>Fecha de Ingreso</th>
+                    <th>Fecha de Entrega</th>
+                    <th>Observaciones</th>
+                    <th>ID Servicio</th>
+                    <th>ID Artículo</th>
+                    <th class="action-buttons-header">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="reparacionesTableBody">
+                <!-- Las reparaciones se cargarán aquí -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+   <!-- Sección de Gestión de Servicios -->
+<div class="entity-section" id="servicioSection" >
+    <h2>Gestión de Servicios</h2>
+    <div class="form-section">
+        <h3>Crear/Actualizar Servicio</h3>
+        <form id="servicioForm">
+            <!-- ID oculto para la edición de servicios -->
+            <input type="hidden" id="servicioId">
+            
+            <div class="form-group">
+                <label for="servicioTipo">Tipo de Servicio:</label>
+                <input type="text" id="servicioTipo" required>
+            </div>
+            <div class="form-group">
+                <label for="servicioPrecio">Precio:</label>
+                <input type="number" id="servicioPrecio" step="0.01" required>
+            </div>
+
+            <button type="submit" id="submitServicioBtn">Crear Servicio</button>
+            <button type="button" id="clearServicioForm" style="display: none;">Limpiar Formulario</button>
+        </form>
+    </div>
+
+    <div class="data-section">
+        <h3>Lista de Servicios</h3>
+        <button type="button" id="loadServiciosBtn" class="load-button">Cargar Servicios</button>
+        <p id="servicioMessage" class="message"></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Servicio</th>
+                    <th>Tipo</th>
+                    <th>Precio</th>
+                    <th class="action-buttons-header">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="serviciosTableBody">
+                <!-- Los servicios se cargarán aquí -->
+            </tbody>
+        </table>
+    </div>
+</div>
 
 
 

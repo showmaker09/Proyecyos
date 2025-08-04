@@ -1,8 +1,12 @@
 const pagoModel = require('../models/pagoModel');
 
-const pagoController = {
-    getAllPagos: (req, res) => {
-        pagoModel.getAllPagos((err, pagos) => {
+const pagoController = 
+{
+    getAllPagos: (req, res) => 
+    {
+        pagoModel.getAllPagos((err, pagos) => 
+        {
+        
             if (err) {
                 console.error('Error al obtener pagos:', err);
                 return res.status(500).json({ message: 'Error interno del servidor' });

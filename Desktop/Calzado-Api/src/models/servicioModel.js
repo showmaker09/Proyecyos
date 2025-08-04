@@ -1,7 +1,8 @@
 // src/models/servicioModel.js
 const db = require('../config/db'); // Asume que 'db' es tu conexión a la base de datos
 
-const servicioModel = {
+const servicioModel = 
+{
     // Ejecutar un Stored Procedure para obtener todos los servicios
     getAllServicios: (callback) => {
         const sql = 'CALL SP_GetServicios()'; // Llama al SP para obtener todos los servicios

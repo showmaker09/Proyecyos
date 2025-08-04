@@ -1,13 +1,13 @@
 
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/userController');
+const servicioController = require('../controllers/servicioController');
 
-// Rutas para la gestión de usuarios
-router.get('/', userController.getAllUsers); // GET /api/users
-router.get('/:id', userController.getUserById); // GET /api/users/:id
-router.post('/', userController.createUser); // POST /api/users
-router.put('/:id', userController.updateUser); // PUT /api/users/:id
-router.delete('/:id', userController.deleteUser); // DELETE /api/users/:id
+// Rutas para la gestión de servicios
+router.get('/', servicioController.getAllServicios); // GET /api/servicios
+router.get('/:id', servicioController.getServicioById); // GET /api/servicios/:id
+router.post('/', servicioController.createServicio); // POST /api/servicios
+router.put('/:id', servicioController.updateServicio); // PUT /api/servicios/:id
+router.delete('/:id', servicioController.deleteServicio); // DELETE /api/servicios/:id
 
 module.exports = router;

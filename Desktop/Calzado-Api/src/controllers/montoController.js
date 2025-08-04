@@ -1,8 +1,11 @@
-const userModel = require('../models/montoModel');
+const montoModel = require('../models/montoModel');
 
-const montoController = {
-    getAllMontos: (req, res) => {
-        montoModel.getAllMontos((err, montos) => {
+const montoController = 
+{
+    getAllMontos: (req, res) => 
+        {
+        montoModel.getAllMontos((err, montos) =>
+       {
             if (err) {
                 console.error('Error al obtener montos:', err);
                 return res.status(500).json({ message: 'Error interno del servidor' });
