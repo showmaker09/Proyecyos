@@ -46,9 +46,9 @@ const materialModel =
     // Ejecutar un Stored Procedure para actualizar un material existente
     updateMaterial: (id_Material, materialData, callback) => {
         const sql = 'CALL SP_UpdateMaterial(?, ?, ?)'; // SP necesita 3 parámetros (id_Material, nombre, cantidad)
-        const { nombre, cantidad } = materialData;
+        const { Nombre, Cantidad } = materialData; // TIENE QUE ESTAR EN MAYUSCULAS:Nombre, Cantidad
 
-        db.query(sql, [id_Material, nombre, cantidad], (err, results) => {
+        db.query(sql, [id_Material, Nombre, Cantidad], (err, results) => {
             if (err) {
                 console.error('Error al ejecutar SP_UpdateMaterial:', err);
                 return callback(err, null);

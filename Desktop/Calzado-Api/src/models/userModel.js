@@ -38,26 +38,26 @@ const userModel = {
     },
 
     // --- Puedes adaptar otros métodos de manera similar ---
-    // getUserById: (id, callback) => {
-    //     const sql = 'CALL GetUserByIdSP(?)';
-    //     db.query(sql, [id], (err, result) => {
-    //         if (err) {
-    //             return callback(err, null);
-    //         }
-    //         callback(null, result[0][0]); // Asumiendo que devuelve un solo usuario
-    //     });
-    // },
+    getUserById: (id, callback) => {
+        const sql = 'CALL GetUserByIdSP(?)';
+        db.query(sql, [id], (err, result) => {
+            if (err) {
+                return callback(err, null);
+            }
+            callback(null, result[0][0]); // Asumiendo que devuelve un solo usuario
+        });
+    },
 
-    // updateUser: (id, userData, callback) => {
-    //     const sql = 'CALL UpdateUserSP(?, ?, ?)';
-    //     const { nombre, email } = userData;
-    //     db.query(sql, [id, nombre, email], (err, results) => {
-    //         if (err) {
-    //             return callback(err, null);
-    //         }
-    //         callback(null, results.affectedRows > 0 ? true : false);
-    //     });
-    // },
+    updateUser: (id, userData, callback) => {
+        const sql = 'CALL UpdateUserSP(?, ?, ?)';
+        const { nombre, email } = userData;
+        db.query(sql, [id, nombre, email], (err, results) => {
+            if (err) {
+                return callback(err, null);
+            }
+            callback(null, results.affectedRows > 0 ? true : false);
+        });
+    },
 
     deleteUser: (id, callback) =>   // Ejecutar un Stored Procedure para eliminar un usuario pero con id
 

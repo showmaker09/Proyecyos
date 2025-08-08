@@ -279,7 +279,7 @@ document.addEventListener('DOMContentLoaded', () =>
         loadUsersBtn.addEventListener('click', fetchUsers); // Evento para el botón "Cargar Usuarios"
 
         // Carga inicial de usuarios (se mantiene para que se muestren al cargar la página)
-        //fetchUsers();
+        fetchUsers();
     }
 
     // --- Lógica para DUEÑOS ---
@@ -435,7 +435,7 @@ document.addEventListener('DOMContentLoaded', () =>
         clearOwnerFormBtn.addEventListener('click', clearOwnerForm);
 
         // Carga inicial de dueños (se mantiene para que se muestren al cargar la página)
-       // fetchOwners();
+        fetchOwners();
     }
 
 

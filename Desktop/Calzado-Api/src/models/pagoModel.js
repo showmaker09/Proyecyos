@@ -49,12 +49,12 @@ const pagoModel =
         });
     },
 
-    // Ejecutar un Stored Procedure para actualizar un pago existente
+    // Ejecutar un Stored Procedure para actualizar un pago existente  revisarlo !ATENCION
     updatePago: (id_Pago, pagoData, callback) => {
         const sql = 'CALL SP_UpdatePago(?, ?, ?, ?, ?)'; // SP necesita 5 parámetros
-        const { id_Reparacion, id_Cliente, Fecha_Pago, id_Monto } = pagoData;
+        const { id_Reparacion, id_cliente, Fecha_Pago, id_Monto } = pagoData;
 
-        db.query(sql, [id_Pago, id_Reparacion, id_Cliente, Fecha_Pago, id_Monto], (err, results) => 
+        db.query(sql, [id_Pago, id_Reparacion, id_cliente, Fecha_Pago, id_Monto], (err, results) => 
         {
             if (err) {
                 console.error('Error al ejecutar SP_UpdatePago:', err);

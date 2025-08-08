@@ -22,7 +22,7 @@ const articuloModel =
     // Se corrigieron los campos para que coincidan con la función de actualización
     createArticulo: (articuloData, callback) => {
         const sql = 'CALL SP_AddArticulo(?, ?, ?)'; // SP necesita 3 parámetros
-        const { id_Tipo, id_cliente, Descripcion } = articuloData; // Campos corregidos
+        const { id_Tipo, id_cliente, Descripcion } = articuloData; // Campos corregidos tiene que ser minuscula
 
         db.query(sql, [id_Tipo, id_cliente, Descripcion], (err, results) => {
             if (err) {
